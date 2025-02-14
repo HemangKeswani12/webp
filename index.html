@@ -6,75 +6,6 @@
     <title>Hemang Keswani - Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Consolas&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            background-color: #5E8464;
-            color: black;
-            font-family: Consolas, monospace;
-        }
-        header, footer {
-            background-color: rgba(0, 50, 0, 0.8);
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-        }
-        .gallery {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -3;
-            overflow: hidden;
-        }
-        .gallery img, .gallery video {
-            position: absolute;
-            max-width: 12.5%;
-            border-radius: 10px;
-            animation: floatDown 20s linear infinite;
-            z-index: -1;
-        }
-        @keyframes floatDown {
-            0% { transform: translateY(-100%); opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-        .ui-container {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 50, 0, 1);
-            padding: 15px 25px;
-            border-radius: 15px;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .ui-container h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        .ui-container nav {
-            margin-top: 10px;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <div class="ui-container">
@@ -96,8 +27,12 @@
                 .then(data => {
                     let media = data.filter(file => file.name.match(/\.(jpg|jpeg|png|gif|mp4)$/i));
                     let gallery = document.querySelector(".gallery");
-                    media.forEach(file => {
+
+                    function spawnImage() {
+                        if (media.length === 0) return;
+                        let file = media[Math.floor(Math.random() * media.length)];
                         let element;
+                        
                         if (file.name.endsWith(".mp4")) {
                             element = document.createElement("video");
                             element.src = file.download_url;
@@ -108,12 +43,21 @@
                             element = document.createElement("img");
                             element.src = file.download_url;
                         }
+
                         element.style.width = "12.5%";
                         element.style.left = `${Math.random() * 90}%`;
-                        element.style.top = "-20%";
-                        element.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                        element.style.top = "-10%";
+                        element.style.position = "absolute";
+                        element.style.animation = "floatDown 5s linear forwards";
+
                         gallery.appendChild(element);
-                    });
+
+                        setTimeout(() => {
+                            gallery.removeChild(element);
+                        }, 5000);
+                    }
+
+                    setInterval(spawnImage, 2000);
                 });
         });
     </script>
