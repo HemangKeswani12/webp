@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background-color: #5E8464; /* Slightly darker matcha green */
+            background-color: #5E8464;
             color: black;
             font-family: Consolas, monospace;
         }
@@ -28,46 +28,6 @@
             color: white;
             text-decoration: none;
         }
-        .layered-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 95%;
-            height: 95vh;
-            z-index: -2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .layer {
-            position: absolute;
-            width: 90%;
-            height: 90%;
-            border-radius: 25px;
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        .layer.front {
-            width: 85%;
-            height: 85%;
-            background-color: rgba(255, 255, 255, 0.5);
-        }
-        main {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            margin: 20px;
-            padding: 20px;
-            border-radius: 15px;
-        }
-        .category-box {
-            width: 200px;
-            padding: 20px;
-            margin: 10px;
-            background-color: rgba(0, 50, 0, 0.1);
-            text-align: center;
-            border-radius: 15px;
-        }
         .gallery {
             position: fixed;
             top: 0;
@@ -79,11 +39,34 @@
         }
         .gallery img, .gallery video {
             position: absolute;
-            animation: flyLeft 20s linear infinite;
+            max-width: 12.5%;
+            border-radius: 10px;
+            animation: floatDown 20s linear infinite;
+            z-index: -1;
         }
-        @keyframes flyLeft {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-100vw); }
+        @keyframes floatDown {
+            0% { transform: translateY(-100%); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        .ui-container {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 50, 0, 1);
+            padding: 15px 25px;
+            border-radius: 15px;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ui-container h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .ui-container nav {
+            margin-top: 10px;
         }
         footer {
             position: fixed;
@@ -94,8 +77,8 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1 style="margin-bottom: 20px;">Hemang Keswani</h1>
+    <div class="ui-container">
+        <h1>Hemang Keswani</h1>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="achievements.html">Achievements</a>
@@ -104,33 +87,14 @@
             <a href="life-log.html">Life Log</a>
             <a href="contact.html">Contact</a>
         </nav>
-    </header>
-    <div class="layered-background">
-        <div class="layer"></div>
-        <div class="layer front"></div>
     </div>
     <div class="gallery"></div>
-    <main>
-        <div class="category-box"><a href="achievements.html">Achievements</a></div>
-        <div class="category-box"><a href="projects.html">Projects</a></div>
-        <div class="category-box"><a href="activities.html">Activities</a></div>
-        <div class="category-box"><a href="life-log.html">Life Log</a></div>
-        <div class="category-box"><a href="contact.html">Contact</a></div>
-    </main>
-    <footer>
-        <p>
-            <a href="https://www.linkedin.com/in/hemangkeswani" target="_blank">LinkedIn</a> |
-            <a href="https://www.youtube.com/@hemangkeswani/videos" target="_blank">YouTube</a> |
-            <a href="mailto:hemangkeswani@gmail.com">Email</a>
-        </p>
-    </footer>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             fetch("https://api.github.com/repos/hemangkeswani12/webp/contents/images")
                 .then(response => response.json())
                 .then(data => {
                     let media = data.filter(file => file.name.match(/\.(jpg|jpeg|png|gif|mp4)$/i));
-                    media.sort((a, b) => parseInt(b.name.match(/\d+/)) - parseInt(a.name.match(/\d+/)));
                     let gallery = document.querySelector(".gallery");
                     media.forEach(file => {
                         let element;
@@ -144,8 +108,10 @@
                             element = document.createElement("img");
                             element.src = file.download_url;
                         }
-                        element.style.width = `${Math.random() * 20 + 10}%`;
-                        element.style.top = `${Math.random() * 100}%`;
+                        element.style.width = "12.5%";
+                        element.style.left = `${Math.random() * 90}%`;
+                        element.style.top = "-20%";
+                        element.style.animationDuration = `${Math.random() * 10 + 10}s`;
                         gallery.appendChild(element);
                     });
                 });
