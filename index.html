@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background-color: #6D9773; /* Slightly darker matcha green */
+            background-color: #5E8464; /* Slightly darker matcha green */
             color: black;
             font-family: Consolas, monospace;
         }
         header, footer {
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 50, 0, 0.8);
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -28,20 +28,43 @@
             color: white;
             text-decoration: none;
         }
+        .layered-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .layer {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 25px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .layer.front {
+            width: 70%;
+            height: 70%;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
         main {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: center;
+            align-items: center;
             margin: 20px;
             padding: 20px;
             border-radius: 15px;
-            background-color: rgba(255, 255, 255, 0.8);
         }
         .category-box {
-            width: 30%;
+            width: 200px;
             padding: 20px;
             margin: 10px;
-            background-color: rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 50, 0, 0.1);
             text-align: center;
             border-radius: 15px;
         }
@@ -72,7 +95,7 @@
 </head>
 <body>
     <header>
-        <h1>Hemang Keswani</h1>
+        <h1 style="margin-bottom: 20px;">Hemang Keswani</h1>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="achievements.html">Achievements</a>
@@ -82,6 +105,10 @@
             <a href="contact.html">Contact</a>
         </nav>
     </header>
+    <div class="layered-background">
+        <div class="layer"></div>
+        <div class="layer front"></div>
+    </div>
     <div class="gallery"></div>
     <main>
         <div class="category-box"><a href="achievements.html">Achievements</a></div>
@@ -99,7 +126,7 @@
     </footer>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            fetch("https://api.github.com/repos/YOUR_GITHUB_USERNAME/YOUR_REPO/contents/images")
+            fetch("https://api.github.com/repos/hemangkeswani12/webp/contents/images")
                 .then(response => response.json())
                 .then(data => {
                     let media = data.filter(file => file.name.match(/\.(jpg|jpeg|png|gif|mp4)$/i));
