@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hemang Keswani - Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Consolas&display=swap" rel="stylesheet">
+    <title>Hemang Keswani </title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="ui-container">
-        <h1 class="title">Hemang Keswani</h1>
+        <h1 class="title">Hemang Keswani   </h1>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="achievements.html">Achievements</a>
@@ -29,10 +28,11 @@
                     let gallery = document.querySelector(".gallery");
                     let index = 0;
 
-                    function addImage() {
+                    function showNextMedia() {
                         if (index >= media.length) index = 0;
-                        let file = media[index];
+                        let file = media[index++];
                         let element;
+                        
                         if (file.name.endsWith(".mp4")) {
                             element = document.createElement("video");
                             element.src = file.download_url;
@@ -43,16 +43,20 @@
                             element = document.createElement("img");
                             element.src = file.download_url;
                         }
+
                         element.classList.add("floating-media");
                         element.style.left = `${Math.random() * 90}%`;
                         gallery.appendChild(element);
-                        setTimeout(() => element.classList.add("fade-out"), 4000);
-                        setTimeout(() => element.remove(), 5000);
-                        index++;
-                        setTimeout(addImage, 500);
+
+                        setTimeout(() => {
+                            element.style.opacity = "0";
+                            setTimeout(() => gallery.removeChild(element), 1000);
+                        }, 4000); // Fade out after 4s
+
+                        setTimeout(showNextMedia, 500); // Ensures one image every 0.5s
                     }
-                    
-                    addImage();
+
+                    showNextMedia();
                 });
         });
     </script>
