@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hemang Keswani - Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Constantia&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,36 +16,53 @@
         <p>Phone: +91 9850504696</p>
         <p><a href="https://www.linkedin.com/in/hemangkeswani" target="_blank">LinkedIn</a></p>
         
-        <div class="section">
-            <h2>About</h2>
-            <p>CS, DS, ML Enthusiast | Debate | Music | Sports | Robotics</p>
+        <div class="section" id="about">
+            <h2 onclick="toggleSection('about-content')">About</h2>
+            <div class="content" id="about-content">
+                <p>CS, DS, ML Enthusiast | Debate | Music | Sports | Robotics</p>
+            </div>
         </div>
         
-        <div class="section">
-            <h2>Achievements</h2>
-            <p>Principal's Award for Best Outgoing Student 2024 at Vidya Valley School</p>
-            <p>Outstanding Intern at International MUN (5 Weeks)</p>
-            <p>American Maths Olympiad Bronze Winner</p>
-            <p>INSSDC Winning Team, ARSSDC Runner-up</p>
+        <div class="section" id="achievements">
+            <h2 onclick="toggleSection('achievements-content')">Achievements</h2>
+            <div class="content" id="achievements-content">
+                <ul>
+                    <li>Principal's Award for Best Outgoing Student 2024 at Vidya Valley School</li>
+                    <li>Outstanding Intern at International MUN (5 Weeks)</li>
+                    <li>American Maths Olympiad Bronze Winner</li>
+                    <li>INSSDC Winning Team, ARSSDC Runner-up</li>
+                    <!-- Add more achievements as needed -->
+                </ul>
+            </div>
         </div>
         
-        <div class="section">
-            <h2>Projects</h2>
-            <p>Designed a rainwater harvesting system (Implemented)</p>
-            <p>INNSDC Space Settlement Blueprint</p>
-            
-            <h3>Video Projects</h3>
-            <iframe src="https://www.youtube.com/embed/4mkvxEsJaVw" allowfullscreen></iframe>
-            <iframe src="https://www.youtube.com/embed/2YHYjUQ3Nts" allowfullscreen></iframe>
+        <div class="section" id="projects">
+            <h2 onclick="toggleSection('projects-content')">Projects</h2>
+            <div class="content" id="projects-content">
+                <ul>
+                    <li>Designed a rainwater harvesting system (Implemented)</li>
+                    <li>INNSDC Space Settlement Blueprint</li>
+                    <!-- Add more projects as needed -->
+                </ul>
+                <h3>Video Projects</h3>
+                <iframe src="https://www.youtube.com/embed/4mkvxEsJaVw" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/2YHYjUQ3Nts" allowfullscreen></iframe>
+            </div>
         </div>
         
-        <div class="section">
-            <h2>Activities</h2>
-            <p>Indus U19 Football Team | Vidya Valley U17 Basketball Team</p>
-            <p>Trinity Guitar Grade 5 | Trinity Piano Grade 4</p>
-            <p>Wharton Global Youth Investment Program Participant</p>
-            <p>School Tinker Club + Maker Club Instructor</p>
+        <div class="section" id="activities">
+            <h2 onclick="toggleSection('activities-content')">Activities</h2>
+            <div class="content" id="activities-content">
+                <ul>
+                    <li>Indus U19 Football Team | Vidya Valley U17 Basketball Team</li>
+                    <li>Trinity Guitar Grade 5 | Trinity Piano Grade 4</li>
+                    <li>Wharton Global Youth Investment Program Participant</li>
+                    <li>School Tinker Club + Maker Club Instructor</li>
+                    <!-- Add more activities as needed -->
+                </ul>
+            </div>
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
