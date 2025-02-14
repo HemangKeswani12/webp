@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="ui-container">
-        <h1>Hemang Keswani</h1>
+        <h1 class="title">Hemang Keswani</h1>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="achievements.html">Achievements</a>
@@ -27,12 +27,12 @@
                 .then(data => {
                     let media = data.filter(file => file.name.match(/\.(jpg|jpeg|png|gif|mp4)$/i));
                     let gallery = document.querySelector(".gallery");
+                    let index = 0;
 
-                    function spawnImage() {
-                        if (media.length === 0) return;
-                        let file = media[Math.floor(Math.random() * media.length)];
+                    function addImage() {
+                        if (index >= media.length) index = 0;
+                        let file = media[index];
                         let element;
-                        
                         if (file.name.endsWith(".mp4")) {
                             element = document.createElement("video");
                             element.src = file.download_url;
@@ -43,21 +43,16 @@
                             element = document.createElement("img");
                             element.src = file.download_url;
                         }
-
-                        element.style.width = "12.5%";
+                        element.classList.add("floating-media");
                         element.style.left = `${Math.random() * 90}%`;
-                        element.style.top = "-10%";
-                        element.style.position = "absolute";
-                        element.style.animation = "floatDown 5s linear forwards";
-
                         gallery.appendChild(element);
-
-                        setTimeout(() => {
-                            gallery.removeChild(element);
-                        }, 5000);
+                        setTimeout(() => element.classList.add("fade-out"), 4000);
+                        setTimeout(() => element.remove(), 5000);
+                        index++;
+                        setTimeout(addImage, 500);
                     }
-
-                    setInterval(spawnImage, 2000);
+                    
+                    addImage();
                 });
         });
     </script>
