@@ -3,28 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery | Hemang Keswani</title>
+    <title>Archive | Hemang Keswani</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Consolas&display=swap" rel="stylesheet">
 </head>
 <body>
+    <canvas id="bg-canvas"></canvas>
+
     <nav class="top-bar">
-        <div class="logo-area">
-            <div class="logo-name">Hemang Keswani</div>
-            <div class="logo-tagline">Engineering, Enterprise, Empathy.</div>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">HOME</a>
-            <a href="gallery.html" class="active">GALLERY</a>
+        <div class="logo-name">HEMANG KESWANI</div>
+        <div class="nav-index">
+            <a href="index.html">/home</a>
+            <a href="gallery.html" class="archive-link">[ARCHIVE]</a>
         </div>
     </nav>
 
-    <div class="main-container gallery-container">
-        <header class="hero" style="min-height: 30vh; margin-bottom: 40px;">
-            <h1 class="holo-text">The Archive</h1>
-            <p>A visual journey through engineering, research, and life.</p>
+    <div class="main-container">
+        <header class="hero" style="min-height: 30vh; margin-bottom: 60px;">
+            <h4 class="highlight-green" style="margin-bottom: 20px;">VISUAL ARCHIVE</h4>
+            <h1>THE<br>ARCHIVE</h1>
+            <p>A visual journey through engineering, research, and life. Each image, video, and document represents a milestone in my path toward building technology that serves humanity.</p>
         </header>
 
         <div class="gallery-grid" id="gallery">
@@ -36,13 +34,11 @@
     <div class="modal" id="modal">
         <span class="close-btn" id="closeBtn">&times;</span>
         <div class="modal-content">
-            <div class="modal-media" id="modalMedia">
-                <!-- Media will be injected here -->
-            </div>
+            <div class="modal-media" id="modalMedia"></div>
             <div class="modal-info">
-                <h2 id="modalTitle">Title</h2>
-                <p class="tech-font" id="modalCategory" style="color: var(--highlight-purple); margin-bottom: 20px;">Category</p>
-                <p id="modalDescription">Description goes here.</p>
+                <h2 id="modalTitle" style="color: var(--accent-green);"></h2>
+                <p id="modalCategory" style="color: var(--accent-amber); margin-bottom: 20px; font-family: var(--font-main); font-size: 0.85rem;"></p>
+                <p id="modalDescription" style="line-height: 1.7; color: #ccc;"></p>
             </div>
         </div>
     </div>
@@ -50,4 +46,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
