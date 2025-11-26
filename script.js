@@ -1,12 +1,12 @@
 // -----------------------------------------------------------------------------
-// DYNAMIC CANVAS BACKGROUND (Super Duper Insane Effect)
+// DYNAMIC CANVAS BACKGROUND (High Contrast Dark Mode)
 // -----------------------------------------------------------------------------
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 
 let width, height;
 let particles = [];
-const particleCount = 150; // Dense grid
+const particleCount = 200; // Increased density
 let mouse = { x: -1000, y: -1000 };
 
 function initCanvas() {
@@ -18,44 +18,41 @@ class Particle {
     constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.size = Math.random() * 2 + 1;
+        this.vx = (Math.random() - 0.5) * 0.8; // Faster movement
+        this.vy = (Math.random() - 0.5) * 0.8;
+        this.size = Math.random() * 2.5 + 1;
         this.baseX = this.x;
         this.baseY = this.y;
-        this.density = (Math.random() * 30) + 1;
+        this.density = (Math.random() * 40) + 1;
     }
 
     update() {
-        // Movement
         this.x += this.vx;
         this.y += this.vy;
 
-        // Mouse interaction (Repulsion/Fluid feel)
+        // Stronger mouse interaction
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         const forceDirectionX = dx / distance;
         const forceDirectionY = dy / distance;
-        const maxDistance = 200;
+        const maxDistance = 250; // Larger radius
         const force = (maxDistance - distance) / maxDistance;
 
         if (distance < maxDistance) {
-            this.x -= forceDirectionX * force * this.density * 2;
-            this.y -= forceDirectionY * force * this.density * 2;
+            this.x -= forceDirectionX * force * this.density * 3;
+            this.y -= forceDirectionY * force * this.density * 3;
         } else {
-            // Return to base-ish position (drift)
             if (this.x !== this.baseX) {
                 const dx = this.x - this.baseX;
-                this.x -= dx/50;
+                this.x -= dx/40;
             }
             if (this.y !== this.baseY) {
                 const dy = this.y - this.baseY;
-                this.y -= dy/50;
+                this.y -= dy/40;
             }
         }
 
-        // Wrap screen
         if (this.x > width) this.x = 0;
         if (this.x < 0) this.x = width;
         if (this.y > height) this.y = 0;
@@ -63,7 +60,7 @@ class Particle {
     }
 
     draw() {
-        ctx.fillStyle = 'rgba(150, 150, 150, 0.5)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // Brighter particles
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.closePath();
@@ -78,9 +75,9 @@ function connect() {
                 + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
             
             if (distance < (width/7) * (height/7)) {
-                let opacityValue = 1 - (distance/10000);
-                // Holographic line color
-                ctx.strokeStyle = `rgba(100, 100, 100, ${opacityValue * 0.2})`; 
+                let opacityValue = 1 - (distance/15000);
+                // Sharp white lines
+                ctx.strokeStyle = `rgba(255, 255, 255, ${opacityValue * 0.3})`; 
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(particles[a].x, particles[a].y);
@@ -114,7 +111,6 @@ window.addEventListener('mousemove', (e) => {
     mouse.y = e.y;
 });
 
-// Init
 initCanvas();
 for (let i = 0; i < particleCount; i++) {
     particles.push(new Particle());
@@ -289,9 +285,9 @@ const mediaItems = [
     },
     {
         file: 'clash_royale_10k_trophies.jpg',
-        title: 'CR Top Ranking',
+        title: 'CR 13K Trophies',
         category: 'Strategy',
-        description: 'Top-tier global ranking reflecting analytical thinking.',
+        description: 'Achieved 13,000+ trophies, placing in the top 2% of global players. This milestone reflects dedication to analytical meta-gaming and long-term strategic planning.',
         type: 'image'
     },
     {
@@ -422,11 +418,11 @@ function initGallery() {
             if (item.type === 'pdf') {
                 mediaElement.src = item.file.replace('.pdf', '.jpg'); 
                 mediaElement.onerror = function() {
-                    // Fallback icon
-                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY0ZDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0IDJINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMnYtOWwtNS01eiIvPjxwb2x5bGluZSBwb2ludHM9IjE0IDIgMTQgOSAyMCA5Ii8+PC9zdmc+'; 
+                    // Fallback icon - White for dark mode
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0IDJINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMnYtOWwtNS01eiIvPjxwb2x5bGluZSBwb2ludHM9IjE0IDIgMTQgOSAyMCA5Ii8+PC9zdmc+'; 
                     this.style.padding = '40px';
                     this.style.objectFit = 'contain';
-                    this.style.background = '#fff';
+                    this.style.background = '#222';
                 };
             } else {
                 mediaElement.src = item.file;
@@ -449,8 +445,9 @@ function initGallery() {
         const overlay = document.createElement('div');
         overlay.className = 'gallery-overlay';
         overlay.innerHTML = `
-            <h3 class="overlay-title">${item.title}</h3>
-            <p style="font-size: 0.8rem; text-transform: uppercase; color: var(--neon-orange); font-family: 'Space Mono';">${item.category}</p>
+            <h3 style="font-size: 1.2rem; margin-bottom: 5px; font-weight:900; color:white;">${item.title}</h3>
+            <p style="font-size: 0.8rem; text-transform: uppercase; color: #aaa; font-family: 'Space Mono';">${item.category}</p>
+            <p style="font-size: 0.9rem; color: #ddd; margin-top: 10px; line-height: 1.4;">${item.description}</p>
         `;
 
         galleryItem.appendChild(mediaElement);
