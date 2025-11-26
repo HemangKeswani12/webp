@@ -1,5 +1,130 @@
-// Media data with descriptions
-// Removed sizing property to ensure uniform grid as requested
+// -----------------------------------------------------------------------------
+// DYNAMIC CANVAS BACKGROUND (Super Duper Insane Effect)
+// -----------------------------------------------------------------------------
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+
+let width, height;
+let particles = [];
+const particleCount = 150; // Dense grid
+let mouse = { x: -1000, y: -1000 };
+
+function initCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+}
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2 + 1;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = (Math.random() * 30) + 1;
+    }
+
+    update() {
+        // Movement
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Mouse interaction (Repulsion/Fluid feel)
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const forceDirectionX = dx / distance;
+        const forceDirectionY = dy / distance;
+        const maxDistance = 200;
+        const force = (maxDistance - distance) / maxDistance;
+
+        if (distance < maxDistance) {
+            this.x -= forceDirectionX * force * this.density * 2;
+            this.y -= forceDirectionY * force * this.density * 2;
+        } else {
+            // Return to base-ish position (drift)
+            if (this.x !== this.baseX) {
+                const dx = this.x - this.baseX;
+                this.x -= dx/50;
+            }
+            if (this.y !== this.baseY) {
+                const dy = this.y - this.baseY;
+                this.y -= dy/50;
+            }
+        }
+
+        // Wrap screen
+        if (this.x > width) this.x = 0;
+        if (this.x < 0) this.x = width;
+        if (this.y > height) this.y = 0;
+        if (this.y < 0) this.y = height;
+    }
+
+    draw() {
+        ctx.fillStyle = 'rgba(150, 150, 150, 0.5)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+    }
+}
+
+function connect() {
+    for (let a = 0; a < particles.length; a++) {
+        for (let b = a; b < particles.length; b++) {
+            let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x))
+                + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
+            
+            if (distance < (width/7) * (height/7)) {
+                let opacityValue = 1 - (distance/10000);
+                // Holographic line color
+                ctx.strokeStyle = `rgba(100, 100, 100, ${opacityValue * 0.2})`; 
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(particles[a].x, particles[a].y);
+                ctx.lineTo(particles[b].x, particles[b].y);
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, width, height);
+    for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+    }
+    connect();
+    requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', () => {
+    initCanvas();
+    particles = [];
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+});
+
+window.addEventListener('mousemove', (e) => {
+    mouse.x = e.x;
+    mouse.y = e.y;
+});
+
+// Init
+initCanvas();
+for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+}
+animate();
+
+
+// -----------------------------------------------------------------------------
+// GALLERY & MEDIA LOGIC
+// -----------------------------------------------------------------------------
 const mediaItems = [
     {
         file: 'arssdc_trophy.jpg',
@@ -285,7 +410,7 @@ function initGallery() {
 
     mediaItems.forEach((item, index) => {
         const galleryItem = document.createElement('div');
-        galleryItem.className = 'gallery-item'; // Removed size classes for uniform tiling
+        galleryItem.className = 'gallery-item';
         
         // Animation delay
         galleryItem.style.animation = `fadeInUp 0.6s ease-out backwards ${index * 0.05}s`;
@@ -297,7 +422,7 @@ function initGallery() {
             if (item.type === 'pdf') {
                 mediaElement.src = item.file.replace('.pdf', '.jpg'); 
                 mediaElement.onerror = function() {
-                    // Fallback icon with updated orange color
+                    // Fallback icon
                     this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY0ZDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0IDJINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMnYtOWwtNS01eiIvPjxwb2x5bGluZSBwb2ludHM9IjE0IDIgMTQgOSAyMCA5Ii8+PC9zdmc+'; 
                     this.style.padding = '40px';
                     this.style.objectFit = 'contain';
@@ -324,8 +449,8 @@ function initGallery() {
         const overlay = document.createElement('div');
         overlay.className = 'gallery-overlay';
         overlay.innerHTML = `
-            <h3 style="font-size: 1rem; margin-bottom: 5px; font-family: 'Space Mono', monospace; text-transform: uppercase;">${item.title}</h3>
-            <p style="font-size: 0.75rem; text-transform: uppercase; color: var(--accent-orange); font-weight: 700;">${item.category}</p>
+            <h3 class="overlay-title">${item.title}</h3>
+            <p style="font-size: 0.8rem; text-transform: uppercase; color: var(--neon-orange); font-family: 'Space Mono';">${item.category}</p>
         `;
 
         galleryItem.appendChild(mediaElement);

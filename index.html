@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hemang Keswani</title>
+    <title>Hemang Keswani | Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <canvas id="bg-canvas"></canvas>
+
     <nav class="top-bar">
-        <div class="logo-area">
-            <div class="logo-dot"></div>
-            <div class="logo-name">HEMANG KESWANI</div>
-        </div>
+        <div class="logo-name glitch-text" data-text="HEMANG KESWANI">HEMANG KESWANI</div>
         <div class="nav-links">
             <a href="index.html" class="active">INDEX</a>
             <a href="gallery.html">ARCHIVE</a>
@@ -25,25 +24,43 @@
         
         <!-- Hero -->
         <section class="hero">
-            <h1 class="holo-text">HEMANG<br>KESWANI.</h1>
-            <p class="hero-sub">
-                <strong>Revolutionizing Tech to be More Human.</strong><br>
-                Engineering, Enterprise, Empathy. Exploring the frontiers of nuclear power, orbital habitats, and sustainable systems to bridge the gap between ambitious engineering and human needs.
+            <div class="hero-tag">ENGINEERING // ENTERPRISE // EMPATHY</div>
+            <h1>REVOLUTIONIZING<br>TECH TO BE<br><span class="holo-text">MORE HUMAN.</span></h1>
+            <p>
+                Exploring the frontiers of nuclear power, orbital habitats, and sustainable systems. Bridging the gap between ambitious engineering and human needs through interdisciplinary design and rigorous research.
             </p>
-            <div class="contact-container">
-                <a href="https://linkedin.com/in/hemang-keswani" class="contact-btn">LinkedIn</a>
-                <a href="mailto:contact@hemangkeswani.com" class="contact-btn">Email</a>
-                <a href="https://github.com/HemangKeswani12" class="contact-btn">GitHub</a>
+        </section>
+
+        <!-- Academic Intelligence -->
+        <section class="horizontal-section">
+            <h2 class="section-header">ACADEMIC INTELLIGENCE</h2>
+            <div class="stats-grid">
+                <div class="glass-panel stat-card">
+                    <span class="stat-number" data-target="98.2">98.2%</span>
+                    <span class="stat-label">ICSE Score</span>
+                </div>
+                <div class="glass-panel stat-card">
+                    <span class="stat-number" data-target="42">42/45</span> <!-- Placeholder -->
+                    <span class="stat-label">IB Diploma</span>
+                </div>
+                <div class="glass-panel stat-card">
+                    <span class="stat-number" data-target="1560">1560</span> <!-- Placeholder -->
+                    <span class="stat-label">SAT Score</span>
+                </div>
+                <div class="glass-panel stat-card">
+                    <span class="stat-number" data-target="1">#1</span>
+                    <span class="stat-label">Rank / Student of the Year</span>
+                </div>
             </div>
         </section>
 
-        <!-- About Narrative -->
+        <!-- Vision Narrative -->
         <section class="horizontal-section">
-            <span class="section-header mono-font">01 / VISION</span>
+            <h2 class="section-header">THE VISION</h2>
             <div class="glass-panel horizontal-card">
                 <div class="card-meta">
-                    <span class="category mono-font">PHILOSOPHY</span>
-                    <h3>The Human Element in Engineering</h3>
+                    <span class="category-tag">PHILOSOPHY</span>
+                    <h3>Sustainable Energy & Space</h3>
                 </div>
                 <div class="card-narrative">
                     <p>
@@ -51,7 +68,7 @@
                     </p>
                     <br>
                     <p>
-                        From the quiet corridors of research institutes to the high-pressure environment of international debates, I've learned that technology without empathy is hollow. Whether I'm redesigning laptop cooling systems to extend hardware lifespans or leading teams to design orbital settlements for 10,000 people, my goal remains the same: to build systems that integrate seamlessly into the fabric of our daily lives, making the complex accessible and the ambitious achievable.
+                        From the quiet corridors of research institutes to the high-pressure environment of international debates, I've learned that technology without empathy is hollow. Whether I'm redesigning laptop cooling systems to extend hardware lifespans or leading teams to design orbital settlements for 10,000 people, my goal remains the same: to build systems that integrate seamlessly into the fabric of our daily lives.
                     </p>
                 </div>
             </div>
@@ -59,96 +76,98 @@
 
         <!-- Research & Innovation -->
         <section class="horizontal-section">
-            <span class="section-header mono-font">02 / RESEARCH & INNOVATION</span>
+            <h2 class="section-header">RESEARCH & INNOVATION</h2>
             
             <div class="glass-panel horizontal-card">
                 <div class="card-meta">
-                    <span class="category mono-font">PHYSICS & ENERGY</span>
+                    <span class="category-tag">PHYSICS</span>
                     <h3>CERN Research Proposal</h3>
                 </div>
                 <div class="card-narrative">
                     <p>
-                        Collaborating with the Physics Department at <strong>IISER Pune</strong>, I delved into the complexities of high-energy physics. Our proposal for CERN wasn't just about theoretical particles; it was an attempt to bridge the gap between fundamental physics and practical energy applications.
-                    </p>
-                    <br>
-                    <p>
-                        The process involved rigorous networking, interdisciplinary coordination, and a deep dive into the mechanics of the universe. It taught me that the answers to our sustainable energy future might be hidden in the smallest building blocks of matter.
+                        Collaborating with the Physics Department at <strong>IISER Pune</strong>, I delved into the complexities of high-energy physics. Our proposal for CERN wasn't just about theoretical particles; it was an attempt to bridge the gap between fundamental physics and practical energy applications. The process involved rigorous networking, interdisciplinary coordination, and a deep dive into the mechanics of the universe.
                     </p>
                 </div>
             </div>
 
             <div class="glass-panel horizontal-card">
                 <div class="card-meta">
-                    <span class="category mono-font">AEROSPACE ENGINEERING</span>
+                    <span class="category-tag">AEROSPACE</span>
                     <h3>ARSSDC Space Settlement</h3>
                 </div>
                 <div class="card-narrative">
                     <p>
-                        At the Asian Regional Space Settlement Design Competition, we weren't just building a model; we were designing a society. As the runner-up team among 150 schools, I led the systems engineering effort for a viable orbital habitat.
-                    </p>
-                    <br>
-                    <p>
-                        Balancing the cold, hard constraints of aerospace engineering with the soft, chaotic needs of human psychology, sociology, and economics was a lesson in holistic design. We engineered life support systems, gravity simulation, and social structures, proving that living among the stars requires as much empathy as it does rocket science.
+                        Runner-up among 150 schools at the Asian Regional Space Settlement Design Competition. We weren't just building a model; we were designing a society. Balancing the cold constraints of aerospace engineering with human psychology, sociology, and economics, we engineered life support systems, gravity simulation, and social structures for a viable orbital habitat.
                     </p>
                 </div>
             </div>
 
             <div class="glass-panel horizontal-card">
                 <div class="card-meta">
-                    <span class="category mono-font">AUTOMOTIVE ENGINEERING</span>
-                    <h3>F1 in Schools (Doppler Racing)</h3>
+                    <span class="category-tag">AUTOMOTIVE</span>
+                    <h3>F1 in Schools (Doppler)</h3>
                 </div>
                 <div class="card-narrative">
                     <p>
-                        Speed is a function of precision. Leading the engineering division for Doppler Racing, I secured the <strong>National Best Engineer Award</strong>. We designed a miniature F1 car that covered 20 meters in just 1.144 seconds.
-                    </p>
-                    <br>
-                    <p>
-                        This achievement was the result of months of iterative design, Computational Fluid Dynamics (CFD) analysis, and wind tunnel testing. It wasn't just about making it fast; it was about understanding airflow, reducing drag, and manufacturing with sub-millimeter tolerance.
+                        Speed is a function of precision. As the Lead Engineer for Doppler Racing, I secured the <strong>National Best Engineer Award</strong>. We designed a miniature F1 car that covered 20 meters in just 1.144 seconds. This was the result of months of iterative design, CFD analysis, and wind tunnel testing—understanding airflow, reducing drag, and manufacturing with sub-millimeter tolerance.
                     </p>
                 </div>
             </div>
         </section>
 
-        <!-- Honors & Leadership -->
+        <!-- Technical Arsenal -->
         <section class="horizontal-section">
-            <span class="section-header mono-font">03 / HONORS & LEADERSHIP</span>
-
-            <div class="glass-panel horizontal-card">
-                <div class="card-meta">
-                    <span class="category mono-font">ACADEMIC & LEADERSHIP</span>
-                    <h3>Student of the Year 2024</h3>
+            <h2 class="section-header">TECHNICAL ARSENAL</h2>
+            <div class="stats-grid">
+                <div class="glass-panel" style="padding: 30px;">
+                    <h4 style="margin-bottom: 15px;">ENGINEERING</h4>
+                    <ul style="list-style: none; line-height: 1.6; color: #555;">
+                        <li>Computational Fluid Dynamics (CFD)</li>
+                        <li>CAD (Fusion 360, SolidWorks)</li>
+                        <li>Wind Tunnel Testing</li>
+                        <li>Hardware Optimization</li>
+                    </ul>
                 </div>
-                <div class="card-narrative">
-                    <p>
-                        Receiving the Principal's Award Citation was a validation of my belief that you don't have to choose between being a scholar and a leader. This honor recognized a year of consistent excellence across academics, community service, and extracurricular leadership. It stands as a reminder that true impact comes from lifting others up as you climb.
-                    </p>
+                <div class="glass-panel" style="padding: 30px;">
+                    <h4 style="margin-bottom: 15px;">RESEARCH</h4>
+                    <ul style="list-style: none; line-height: 1.6; color: #555;">
+                        <li>High Energy Physics</li>
+                        <li>Space Policy & Law</li>
+                        <li>Sustainable Energy Systems</li>
+                        <li>Technical Writing</li>
+                    </ul>
+                </div>
+                <div class="glass-panel" style="padding: 30px;">
+                    <h4 style="margin-bottom: 15px;">LEADERSHIP</h4>
+                    <ul style="list-style: none; line-height: 1.6; color: #555;">
+                        <li>Team Management (10+ members)</li>
+                        <li>Public Speaking & Debate</li>
+                        <li>Strategic Planning</li>
+                        <li>International Collaboration</li>
+                    </ul>
                 </div>
             </div>
+        </section>
 
-            <div class="glass-panel horizontal-card">
-                <div class="card-meta">
-                    <span class="category mono-font">DEBATE & DIPLOMACY</span>
-                    <h3>International Space UN Debate</h3>
-                </div>
-                <div class="card-narrative">
-                    <p>
-                        Awarded for Outstanding Performance at Asia's largest international UN debate. The topic was space policy—a field where law, ethics, and engineering collide. Defending complex positions on international cooperation in scientific endeavors sharpened my ability to articulate technical concepts to diverse audiences, a skill crucial for any engineer who wants to change the world.
-                    </p>
-                </div>
+        <!-- Footer -->
+        <section class="contact-footer">
+            <a href="mailto:contact@hemangkeswani.com" class="big-link glitch-text" data-text="GET IN TOUCH">GET IN TOUCH</a>
+            <div style="margin-top: 40px; display: flex; justify-content: center; gap: 30px;">
+                <a href="https://linkedin.com/in/hemang-keswani" class="nav-links" style="margin:0;">LINKEDIN</a>
+                <a href="https://github.com/HemangKeswani12" class="nav-links" style="margin:0;">GITHUB</a>
             </div>
         </section>
 
     </div>
 
-    <!-- Hidden Modal Structure for reuse if needed, though Index is now narrative focused -->
+    <!-- Hidden Modal -->
     <div class="modal" id="modal">
         <span class="close-btn" id="closeBtn">&times;</span>
         <div class="modal-content">
             <div class="modal-media" id="modalMedia"></div>
             <div class="modal-info">
                 <h2 id="modalTitle"></h2>
-                <p class="mono-font" id="modalCategory" style="color: var(--accent-orange); margin-bottom: 20px;"></p>
+                <p class="mono-font" id="modalCategory" style="color: var(--neon-orange); margin-bottom: 20px;"></p>
                 <p id="modalDescription"></p>
             </div>
         </div>
