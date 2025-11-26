@@ -1,308 +1,271 @@
-// Media data with descriptions and layout sizes
+// Media data with descriptions
+// Removed sizing property to ensure uniform grid as requested
 const mediaItems = [
     {
         file: 'arssdc_trophy.jpg',
         title: 'ARSSDC Trophy',
-        category: 'Space Settlement Design',
-        description: 'Trophy photo from the Asian-level competition where my team placed runners-up among 150 schools. Showcases engineering teamwork, systems design, and leadership under high-pressure international collaboration. This competition challenged us to design a complete space settlement, considering everything from structural engineering to economics and social systems.',
-        type: 'image',
-        size: 'large'
+        category: 'Space Settlement',
+        description: 'Runners-up among 150 schools. A testament to engineering teamwork and systems design under pressure.',
+        type: 'image'
     },
     {
         file: 'arssdc_winner.png',
-        title: 'ARSSDC Award Announcement',
-        category: 'Space Settlement Design',
-        description: 'Official award recognition image. Reflects interdisciplinary design thinking—balancing architecture, aerospace, and economics within a simulated NASA project. Our team worked tirelessly to integrate multiple engineering disciplines into a cohesive, viable space habitat design.',
-        type: 'image',
-        size: 'medium'
+        title: 'ARSSDC Award',
+        category: 'Space Settlement',
+        description: 'Official recognition of our interdisciplinary design balancing architecture, aerospace, and economics.',
+        type: 'image'
     },
     {
         file: 'Citation_Principals_Award_Hemang.pdf',
-        title: 'Principal\'s Award Citation',
-        category: 'Academic Recognition',
-        description: 'Formal citation for being named Student of the Year 2024—acknowledging academics, leadership, and community contribution across all domains. This award represents consistent excellence across academics, extracurriculars, and community service throughout my school career.',
-        type: 'pdf',
-        size: 'large'
+        title: 'Principal\'s Citation',
+        category: 'Academic Honor',
+        description: 'Student of the Year 2024. Acknowledging academics, leadership, and community contribution.',
+        type: 'pdf'
     },
     {
         file: 'principalsaward_2.jpg',
-        title: 'Principal\'s Award Ceremony',
-        category: 'Academic Recognition',
-        description: 'Award photo representing consistent academic excellence and institutional trust in leadership qualities. Being recognized as Student of the Year is a testament to balancing multiple responsibilities while maintaining high standards in all areas.',
-        type: 'image',
-        size: 'medium'
+        title: 'Award Ceremony',
+        category: 'Academic Honor',
+        description: 'Receiving the Principal\'s Award, representing consistent academic excellence.',
+        type: 'image'
     },
     {
         file: 'CERN_Research_Proposal.pdf',
-        title: 'CERN Research Proposal',
+        title: 'CERN Proposal',
         category: 'Physics Research',
-        description: 'Detailed research proposal developed in collaboration with IISER Pune for potential work at CERN. Focuses on high-energy physics applications and sustainable energy theoretical frameworks.',
-        type: 'pdf',
-        size: 'large'
+        description: 'Research proposal for high-energy physics applications in sustainable energy.',
+        type: 'pdf'
     },
     {
         file: 'IEEE_research.pdf',
-        title: 'IEEE Research Paper',
+        title: 'IEEE Paper',
         category: 'Engineering Research',
-        description: 'Published research paper exploring advanced engineering concepts. Demonstrates academic rigor and contribution to the technical community.',
-        type: 'pdf',
-        size: 'medium'
+        description: 'Published research paper exploring advanced engineering concepts.',
+        type: 'pdf'
     },
     {
         file: 'f1_materials.jpg',
-        title: 'Doppler Racing: Manufacturing Materials',
+        title: 'Doppler: Manufacturing',
         category: 'F1 in Schools',
-        description: 'Photos documenting design and testing phases of the team\'s car components—demonstrating practical engineering skills and iterative problem-solving. Every component was carefully crafted and tested to optimize performance while maintaining structural integrity.',
-        type: 'image',
-        size: 'small'
+        description: 'Design and testing phases of the car components.',
+        type: 'image'
     },
     {
         file: 'f1_materials2.jpg',
-        title: 'Doppler Racing: Design Process',
+        title: 'Doppler: Design',
         category: 'F1 in Schools',
-        description: 'Detailed view of our manufacturing and design process. Each iteration brought us closer to the perfect balance of aerodynamics, weight distribution, and speed. This hands-on engineering taught me more than any textbook could.',
-        type: 'image',
-        size: 'small'
+        description: 'Detailed view of our manufacturing and iterative design process.',
+        type: 'image'
     },
     {
         file: 'f1_materials3.jpg',
-        title: 'Doppler Racing: Component Testing',
+        title: 'Doppler: Testing',
         category: 'F1 in Schools',
-        description: 'Testing phase documentation showing our commitment to precision and quality. We conducted multiple test runs, analyzing data and refining our design based on real-world performance metrics.',
-        type: 'image',
-        size: 'small'
+        description: 'Commitment to precision and quality through rigorous testing.',
+        type: 'image'
     },
     {
         file: 'f1_nationals1.jpg',
-        title: 'Doppler Racing: National Finals',
+        title: 'Doppler: Nationals',
         category: 'F1 in Schools',
-        description: 'Event images from the National F1 in Schools competition. Led the engineering and marketing divisions and secured Best Engineer Award among 120 schools. This competition was the culmination of months of hard work, innovation, and teamwork.',
-        type: 'image',
-        size: 'wide'
+        description: 'Secured Best Engineer Award among 120 schools at the National Finals.',
+        type: 'image'
     },
     {
         file: 'f1_nationals2.jpg',
-        title: 'Doppler Racing: National Competition',
+        title: 'Doppler: Competition',
         category: 'F1 in Schools',
-        description: 'Competing at the national level taught me to work under pressure, think strategically, and lead a diverse team. The experience of presenting our work to industry professionals was invaluable.',
-        type: 'image',
-        size: 'medium'
+        description: 'Presenting our work to industry professionals under pressure.',
+        type: 'image'
     },
     {
         file: 'f1_nationals3vid.mp4',
-        title: 'Doppler Racing: Nationals Car Run',
+        title: 'Nationals Car Run',
         category: 'F1 in Schools',
-        description: 'Race clip demonstrating our custom-engineered car achieving 20m in 1.144s—represents applied physics, design optimization, and engineering precision. Watching months of work come together in this single run was exhilarating.',
-        type: 'video',
-        size: 'large'
+        description: 'Our custom car achieving 20m in 1.144s.',
+        type: 'video'
     },
     {
         file: 'f1_nationals4.jpg',
-        title: 'Doppler Racing: Team Celebration',
+        title: 'Team Celebration',
         category: 'F1 in Schools',
-        description: 'Celebrating our achievements at nationals. This moment captured the joy of seeing our hard work recognized and validated at the highest level of school competition.',
-        type: 'image',
-        size: 'medium'
+        description: 'Celebrating our hard work and validation at the highest level.',
+        type: 'image'
     },
     {
         file: 'f1_nationals5.jpg',
-        title: 'Doppler Racing: Award Recognition',
+        title: 'Best Engineer Award',
         category: 'F1 in Schools',
-        description: 'Receiving the Best Engineer Award was a defining moment. It recognized not just technical skills, but leadership, innovation, and the ability to inspire a team toward a common goal.',
-        type: 'image',
-        size: 'medium'
+        description: 'Recognition of technical skills, leadership, and innovation.',
+        type: 'image'
     },
     {
         file: 'f1_regionals.jpg',
-        title: 'Doppler Racing: Regional Qualifiers',
+        title: 'Regional Qualifiers',
         category: 'F1 in Schools',
-        description: 'Regional-level race visuals; part of the team\'s journey to the nationals. This was where our journey began, testing our initial designs and learning from early challenges.',
-        type: 'image',
-        size: 'small'
+        description: 'The beginning of our journey at the regional level.',
+        type: 'image'
     },
     {
         file: 'f1_regionals2.jpg',
-        title: 'Doppler Racing: Regional Competition',
+        title: 'Regional Race',
         category: 'F1 in Schools',
-        description: 'The regional competition was our proving ground. Each race taught us something new about engineering, teamwork, and resilience.',
-        type: 'image',
-        size: 'small'
+        description: 'Proving ground for our initial engineering concepts.',
+        type: 'image'
     },
     {
         file: 'f1_regionals3.jpg',
-        title: 'Doppler Racing: Early Development',
+        title: 'Early Development',
         category: 'F1 in Schools',
-        description: 'Shows early-stage ideation and teamwork development. These initial stages were crucial in establishing our team dynamics and design philosophy.',
-        type: 'image',
-        size: 'small'
+        description: 'Early-stage ideation and team development.',
+        type: 'image'
     },
     {
         file: 'f1_solarcar.jpg',
-        title: 'Doppler Racing: Solar Car Prototype',
-        category: 'F1 in Schools',
-        description: 'Designed and tested solar-powered vehicle concepts, linking renewable energy systems with racing aerodynamics. This project expanded our understanding of sustainable engineering and alternative energy integration.',
-        type: 'image',
-        size: 'medium'
+        title: 'Solar Car Prototype',
+        category: 'Green Energy',
+        description: 'Linking renewable energy systems with racing aerodynamics.',
+        type: 'image'
     },
     {
         file: 'f1_solarcar2.jpg',
-        title: 'Solar Car Development',
-        category: 'F1 in Schools',
-        description: 'Further development of our solar car prototype, exploring the intersection of clean energy and high-performance engineering. This project challenged us to think beyond traditional combustion systems.',
-        type: 'image',
-        size: 'medium'
+        title: 'Solar Car Dev',
+        category: 'Green Energy',
+        description: 'Exploring clean energy and high-performance engineering.',
+        type: 'image'
     },
     {
         file: 'IISER_visit.jpg',
-        title: 'IISER Pune Collaboration',
-        category: 'Research & Academia',
-        description: 'Taken during discussions with IISER Pune\'s Physics Department and Student Activity Centre on our CERN research proposal. Showcases initiative in networking and interdisciplinary research coordination. These meetings opened doors to understanding cutting-edge physics research.',
-        type: 'image',
-        size: 'large'
+        title: 'IISER Collaboration',
+        category: 'Research',
+        description: 'Discussions on CERN research proposal at IISER Pune.',
+        type: 'image'
     },
     {
         file: 'MU20_debate_asias_largest.jpg',
-        title: 'International Space UN Debate',
-        category: 'Debate & Oratory',
-        description: 'Recognition for Outstanding Performance at Asia\'s largest international UN debate. Exemplifies communication, argumentation, and research articulation skills. Debating international space policy required deep research and the ability to defend complex positions under pressure.',
-        type: 'image',
-        size: 'tall'
+        title: 'Space UN Debate',
+        category: 'Debate',
+        description: 'Outstanding Performance at Asia\'s largest international UN debate.',
+        type: 'image'
     },
     {
         file: 'spUN_debate.png',
-        title: 'Space UN Debate Certificate',
-        category: 'Debate & Oratory',
-        description: 'Official recognition for Outstanding Performance at the International Space UN Debate. This competition reinforced my passion for space policy and international cooperation in scientific endeavors.',
-        type: 'image',
-        size: 'medium'
+        title: 'Debate Certificate',
+        category: 'Debate',
+        description: 'Official recognition for Outstanding Performance.',
+        type: 'image'
     },
     {
         file: 'orator.jpg',
-        title: 'Regional Debate Achievement',
-        category: 'Debate & Oratory',
-        description: 'Image from school annual event. I love being a public speaker and captivating an audience. The ability to articulate complex ideas clearly and persuasively is something I continuously work to improve.',
-        type: 'image',
-        size: 'medium'
+        title: 'Public Speaking',
+        category: 'Debate',
+        description: 'Captivating an audience at the school annual event.',
+        type: 'image'
     },
     {
         file: 'clash_royale_10k_trophies.jpg',
-        title: 'Clash Royale 10K Achievement',
-        category: 'Strategic Gaming',
-        description: 'Screenshot marking top-tier global ranking in a strategic game—reflecting analytical thinking, long-term planning, and persistence. Achieving this level required thousands of hours of practice, strategic analysis, and adaptation to constantly changing meta-game dynamics.',
-        type: 'image',
-        size: 'small'
+        title: 'CR Top Ranking',
+        category: 'Strategy',
+        description: 'Top-tier global ranking reflecting analytical thinking.',
+        type: 'image'
     },
     {
         file: 'cr_deck.jpg',
-        title: 'Personal Strategy Deck',
-        category: 'Strategic Gaming',
-        description: 'Illustrates methodical planning and meta-adaptation—mirrors analytical traits useful in research and engineering. Building and refining this deck taught me about optimization, resource management, and strategic thinking.',
-        type: 'image',
-        size: 'small'
+        title: 'Strategy Deck',
+        category: 'Strategy',
+        description: 'Methodical planning and meta-adaptation.',
+        type: 'image'
     },
     {
         file: 'Im_adventurous.jpg',
         title: 'Adventurous Spirit',
         category: 'Personal',
-        description: 'Represents curiosity and openness to new experiences—indicative of a balanced, explorative mindset beyond academics. I believe the best learning happens when we step outside our comfort zones.',
-        type: 'image',
-        size: 'tall'
+        description: 'Curiosity and openness to new experiences.',
+        type: 'image'
     },
     {
         file: 'im_goofy.jpg',
-        title: 'Goofy Side',
+        title: 'Authenticity',
         category: 'Personal',
-        description: 'Highlights authenticity and humor—shows approachability and social ease within teams. Life is serious enough; being able to laugh and keep things light helps create better team dynamics.',
-        type: 'image',
-        size: 'medium'
+        description: 'Approachability and social ease within teams.',
+        type: 'image'
     },
     {
         file: 'im_introspective.jpg',
-        title: 'Introspective Moments',
+        title: 'Introspection',
         category: 'Personal',
-        description: 'Reflects reflective temperament, thoughtfulness, and motivation-driven discipline—key for research and independent work. I find clarity in quiet moments of contemplation.',
-        type: 'image',
-        size: 'medium'
+        description: 'Reflective temperament and thoughtfulness.',
+        type: 'image'
     },
     {
         file: 'me_and_brother.jpg',
         title: 'Family Bond',
         category: 'Personal',
-        description: 'Represents personal grounding, empathy, and family values—emphasizing balance between ambition and relationships. Family keeps me grounded and reminds me what truly matters.',
-        type: 'image',
-        size: 'small'
+        description: 'Personal grounding and family values.',
+        type: 'image'
     },
     {
         file: 'me_and_frnds.jpg',
-        title: 'With Friends',
+        title: 'Camaraderie',
         category: 'Personal',
-        description: 'Displays teamwork and camaraderie—suggests strong interpersonal skills and sociability in collaborative settings. The friendships I\'ve built are as important to me as any achievement.',
-        type: 'image',
-        size: 'small'
+        description: 'Teamwork and strong interpersonal skills.',
+        type: 'image'
     },
     {
         file: 'me_grinding.jpg',
-        title: 'Focused Work Session',
+        title: 'The Grind',
         category: 'Personal',
-        description: 'Snapshot from a late-night build session—captures work ethic, intensity, and consistency in hands-on engineering projects. Some of my best work happens in these deep focus sessions.',
-        type: 'image',
-        size: 'medium'
+        description: 'Late-night build session capturing work ethic.',
+        type: 'image'
     },
     {
         file: 'laptop_cooling_proj.jpg',
-        title: 'Hardware Optimization Project',
-        category: 'Technical Projects',
-        description: 'Modified internal component layout to improve airflow and reduce laptop temperatures. Demonstrates pragmatic engineering problem-solving. This project taught me that sometimes the best solutions come from understanding the fundamentals and applying creative thinking.',
-        type: 'image',
-        size: 'medium'
+        title: 'Laptop Cooling',
+        category: 'Hardware',
+        description: 'Modified internal component layout to improve airflow.',
+        type: 'image'
     },
     {
         file: 'Intro_to_gen_AI_course_certificate (1).pdf',
-        title: 'Introduction to Generative AI',
-        category: 'Certifications',
-        description: 'Google Cloud certification showing structured learning in AI fundamentals, linking conceptual understanding to future applied AI projects. Understanding generative AI is crucial for the future of technology.',
-        type: 'pdf',
-        size: 'small'
+        title: 'Gen AI Cert',
+        category: 'Certification',
+        description: 'Google Cloud certification in AI fundamentals.',
+        type: 'pdf'
     },
     {
         file: 'rocketscience101.png',
         title: 'Rocket Science 101',
-        category: 'Certifications',
-        description: 'University of Michigan completion certificate (98.2%) for university-level aerospace fundamentals—shows advanced comprehension and self-driven learning. This course deepened my understanding of aerospace engineering principles.',
-        type: 'image',
-        size: 'medium'
+        category: 'Certification',
+        description: 'Univ. of Michigan aerospace fundamentals (98.2%).',
+        type: 'image'
     },
     {
         file: 'soccer1.jpg',
-        title: 'National Football U17/U19',
+        title: 'National Football',
         category: 'Sports',
-        description: 'Match and team photos from national-level tournaments. Represent leadership, teamwork, and physical discipline. Balance academics with athletics. Football taught me about teamwork, strategy, and pushing through physical and mental barriers.',
-        type: 'image',
-        size: 'large'
+        description: 'U17/U19 National tournaments representation.',
+        type: 'image'
     },
     {
         file: 'soccer2.jpg',
-        title: 'Football Competition',
+        title: 'Team Sport',
         category: 'Sports',
-        description: 'Competing at the national level in football while maintaining academic excellence taught me time management and dedication. Sports provide balance and keep me physically and mentally sharp.',
-        type: 'image',
-        size: 'medium'
+        description: 'Leadership and teamwork on the field.',
+        type: 'image'
     },
     {
         file: 'selfdefence_bluebelt.jpg',
-        title: 'Martial Arts Blue Belt',
-        category: 'Sports & Discipline',
-        description: 'Indicates discipline, perseverance, and structured self-improvement through long-term practice. Martial arts taught me patience, respect, and the importance of consistent practice.',
-        type: 'image',
-        size: 'small'
+        title: 'Martial Arts',
+        category: 'Sports',
+        description: 'Blue Belt certification indicating discipline.',
+        type: 'image'
     },
     {
         file: 'other_certificates.pdf',
-        title: 'Miscellaneous Achievements',
-        category: 'Certifications',
-        description: 'Consolidated proof of academic, leadership, and extracurricular awards across various domains. Each certificate represents a challenge overcome, a skill learned, or recognition earned.',
-        type: 'pdf',
-        size: 'small'
+        title: 'Achievements',
+        category: 'Awards',
+        description: 'Consolidated proof of academic and leadership awards.',
+        type: 'pdf'
     }
 ];
 
@@ -322,7 +285,7 @@ function initGallery() {
 
     mediaItems.forEach((item, index) => {
         const galleryItem = document.createElement('div');
-        galleryItem.className = `gallery-item size-${item.size || 'small'}`;
+        galleryItem.className = 'gallery-item'; // Removed size classes for uniform tiling
         
         // Animation delay
         galleryItem.style.animation = `fadeInUp 0.6s ease-out backwards ${index * 0.05}s`;
@@ -332,12 +295,10 @@ function initGallery() {
         if (item.type === 'image' || item.type === 'pdf') {
             mediaElement = document.createElement('img');
             if (item.type === 'pdf') {
-                // Fallback for PDF thumbnails - In real prod, generate thumbnails. 
-                // Here using a placeholder/icon strategy or finding a corresponding image if available
                 mediaElement.src = item.file.replace('.pdf', '.jpg'); 
                 mediaElement.onerror = function() {
-                    // Fallback icon if .jpg doesn't exist
-                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY2YjM1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0IDJINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMnYtOWwtNS01eiIvPjxwb2x5bGluZSBwb2ludHM9IjE0IDIgMTQgOSAyMCA5Ii8+PC9zdmc+'; 
+                    // Fallback icon with updated orange color
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY0ZDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0IDJINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMnYtOWwtNS01eiIvPjxwb2x5bGluZSBwb2ludHM9IjE0IDIgMTQgOSAyMCA5Ii8+PC9zdmc+'; 
                     this.style.padding = '40px';
                     this.style.objectFit = 'contain';
                     this.style.background = '#fff';
@@ -363,8 +324,8 @@ function initGallery() {
         const overlay = document.createElement('div');
         overlay.className = 'gallery-overlay';
         overlay.innerHTML = `
-            <h3 style="font-size: 1rem; margin-bottom: 5px;">${item.title}</h3>
-            <p style="font-size: 0.75rem; text-transform: uppercase; color: var(--highlight-green);">${item.category}</p>
+            <h3 style="font-size: 1rem; margin-bottom: 5px; font-family: 'Space Mono', monospace; text-transform: uppercase;">${item.title}</h3>
+            <p style="font-size: 0.75rem; text-transform: uppercase; color: var(--accent-orange); font-weight: 700;">${item.category}</p>
         `;
 
         galleryItem.appendChild(mediaElement);
