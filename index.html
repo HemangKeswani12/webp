@@ -3,294 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hemang Keswani</title>
+    <title>Hemang Keswani | Engineering & Enterprise</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Background Canvas -->
     <canvas id="circuit-canvas"></canvas>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-brand">HK</div>
-        <div class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#journey">Journey</a>
-            <a href="#skills">Skills</a>
-            <a href="#contact">Contact</a>
-            <a href="gallery.html" class="archive-btn">Archive</a>
-        </div>
+    <!-- Index Navigation (Right Side) -->
+    <nav class="index-nav">
+        <div class="index-item" onclick="scrollToSection('hero')">Home</div>
+        <div class="index-item" onclick="scrollToSection('academics')">Academics</div>
+        <div class="index-item" onclick="scrollToSection('tech')">Arsenal</div>
+        <div class="index-item" onclick="scrollToSection('research')">Research</div>
+        <div class="index-item" onclick="scrollToSection('journey')">Journey</div>
+        <div class="index-item" onclick="scrollToSection('gallery')">Archive</div>
+        <div class="index-item" onclick="scrollToSection('contact')">Contact</div>
     </nav>
 
     <div class="container">
         
         <!-- Hero Section -->
-        <section id="home" class="hero-section">
-            <div class="hero-content">
-                <p class="greeting">Hi there! 👋</p>
-                <h1 class="hero-title">I'm <span class="highlight">Hemang Keswani</span>.</h1>
-                <p class="hero-subtitle">
-                    Engineering student, researcher, and entrepreneur. <br>
-                    Building systems at the intersection of energy, aerospace, and AI.
-                </p>
+        <section id="hero" class="hero section">
+            <h1 class="hero-name">HEMANG<br>KESWANI</h1>
+            
+            <div class="hero-bio">
+                <p>Engineering student, researcher, and entrepreneur building high-impact systems at the intersection of energy, aerospace, and AI.</p>
                 
-                <div class="hero-tags">
-                    <span class="tag">Engineering</span>
-                    <span class="tag">Enterprise</span>
-                    <span class="tag">Research</span>
-                    <span class="tag">AI & Robotics</span>
-                </div>
-
-                <div class="hero-actions">
-                    <a href="#contact" class="btn-primary">Get in Touch</a>
-                    <a href="gallery.html" class="btn-secondary">View Archive</a>
+                <div class="bio-details">
+                    <div class="bio-detail-item"><strong>ORIGIN:</strong> Pune, India</div>
+                    <div class="bio-detail-item"><strong>BORN:</strong> 2007</div>
+                    <div class="bio-detail-item"><strong>LANGUAGES:</strong> English, French, Spanish, Hindi, Sindhi</div>
+                    <div class="bio-detail-item"><strong>CURRENT:</strong> Founder @ Scriptex.ai</div>
                 </div>
             </div>
         </section>
 
-        <!-- About Section -->
-        <section id="about" class="section">
+        <!-- Academics Section (Top Priority) -->
+        <section id="academics" class="section">
             <div class="section-header">
-                <span class="section-number">01.</span>
-                <h2 class="section-title">ABOUT ME</h2>
+                <div class="section-marker"></div>
+                <h2>ACADEMIC_INTELLIGENCE</h2>
+            </div>
+
+            <div class="academic-grid">
+                <!-- IB -->
+                <div class="academic-card">
+                    <h4>IB DIPLOMA</h4>
+                    <div class="academic-score-big">43/45</div>
+                    <div class="grade-table">
+                        <div class="grade-row"><span>Math AA HL</span><span>7/7</span></div>
+                        <div class="grade-row"><span>Physics HL</span><span>7/7</span></div>
+                        <div class="grade-row"><span>Computer Science HL</span><span>7/7</span></div>
+                        <div class="grade-row"><span>Chemistry SL</span><span>7/7</span></div>
+                        <div class="grade-row"><span>English A L&L SL</span><span>6/7</span></div>
+                        <div class="grade-row"><span>Spanish Ab Initio</span><span>6/7</span></div>
+                    </div>
+                </div>
+
+                <!-- SAT -->
+                <div class="academic-card">
+                    <h4>STANDARDIZED</h4>
+                    <div class="academic-score-big">1540</div>
+                    <div class="grade-table">
+                        <div class="grade-row"><span>SAT Percentile</span><span>99th</span></div>
+                        <div class="grade-row"><span>Mathematics</span><span>800</span></div>
+                        <div class="grade-row"><span>Reading & Writing</span><span>740</span></div>
+                        <div class="grade-row"><span>Class Rank</span><span>#1 Student of Year</span></div>
+                    </div>
+                </div>
+
+                <!-- ICSE -->
+                <div class="academic-card">
+                    <h4>ICSE BOARD</h4>
+                    <div class="academic-score-big">95.2%</div>
+                    <div class="grade-table">
+                        <div class="grade-row"><span>Mathematics</span><span>97%</span></div>
+                        <div class="grade-row"><span>Computer Apps</span><span>96%</span></div>
+                        <div class="grade-row"><span>English (Avg)</span><span>95%</span></div>
+                        <div class="grade-row"><span>Science (Avg)</span><span>93%</span></div>
+                        <div class="grade-row"><span>Foreign Lang</span><span>95%</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Arsenal -->
+        <section id="tech" class="section">
+            <div class="section-header">
+                <div class="section-marker"></div>
+                <h2>TECHNICAL_ARSENAL</h2>
+            </div>
+
+            <div class="tech-box">
+                <h4 style="margin-bottom: 15px; color: var(--accent-orange);">SOFTWARE & PROGRAMMING</h4>
+                <div class="skills-grid">
+                    <div class="skill-tag">Python</div>
+                    <div class="skill-tag">Java</div>
+                    <div class="skill-tag">JavaScript</div>
+                    <div class="skill-tag">C++</div>
+                    <div class="skill-tag">R</div>
+                    <div class="skill-tag">MATLAB</div>
+                    <div class="skill-tag">SQL</div>
+                    <div class="skill-tag">HTML/CSS</div>
+                    <div class="skill-tag">Git</div>
+                    <div class="skill-tag">React</div>
+                    <div class="skill-tag">Node.js</div>
+                    <div class="skill-tag">OpenCV</div>
+                    <div class="skill-tag">TensorFlow</div>
+                </div>
             </div>
             
-            <div class="glass-card">
-                <p class="about-text">
-                    I am a driven innovator born in <strong>2007</strong> in <strong>Pune, India</strong>. My passion lies in revolutionizing technology to be more human-centric, specifically within sustainable energy management and space-based systems.
-                </p>
-                <p class="about-text">
-                    With a strong foundation in both hardware and software, I strive to bridge the gap between theoretical physics and practical engineering solutions. Whether it's leading a national F1 in Schools team or publishing research on grid stability, my work is always impact-oriented.
-                </p>
-
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Born</span>
-                        <span class="info-value">2007, Pune, India</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Languages</span>
-                        <span class="info-value">English, French, Spanish, Hindi, Sindhi</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Focus</span>
-                        <span class="info-value">Energy, Aerospace, AI</span>
-                    </div>
+            <div class="tech-box" style="margin-top: 20px;">
+                <h4 style="margin-bottom: 15px; color: var(--accent-purple);">ENGINEERING & SIMULATION</h4>
+                <div class="skills-grid">
+                    <div class="skill-tag">SOLIDWORKS</div>
+                    <div class="skill-tag">ANSYS Fluent (CFD)</div>
+                    <div class="skill-tag">Fusion 360</div>
+                    <div class="skill-tag">AutoCAD</div>
+                    <div class="skill-tag">FEA Simulation</div>
+                    <div class="skill-tag">3D Printing</div>
+                    <div class="skill-tag">CNC Machining</div>
+                    <div class="skill-tag">Circuit Design</div>
                 </div>
             </div>
         </section>
 
-        <!-- Journey Section (Timeline) -->
+        <!-- Research -->
+        <section id="research" class="section">
+            <div class="section-header">
+                <div class="section-marker"></div>
+                <h2>RESEARCH_PAPERS</h2>
+            </div>
+
+            <!-- IEEE -->
+            <div class="tech-box" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>IEEE Research Paper</h3>
+                    <a href="IEEE_research.pdf" target="_blank" style="color: var(--accent-orange); border: 1px solid var(--accent-orange); padding: 5px 10px; font-size: 0.8rem;">VIEW PDF</a>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                    Submitted to IEEE. Investigates signal processing and neural optimization within a Bayesian and Reinforcement Learning framework. The study proposes a novel method for optimizing noise reduction in high-frequency signal transmission, applicable to both telecommunications and deep-space telemetry.
+                </p>
+            </div>
+
+            <!-- EV Grid -->
+            <div class="tech-box" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>Smart EV Grid Stability</h3>
+                    <a href="main.pdf" target="_blank" style="color: var(--accent-orange); border: 1px solid var(--accent-orange); padding: 5px 10px; font-size: 0.8rem;">VIEW PDF</a>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                    MDPI Submission. A comprehensive statistical analysis of urban distribution grid stability under high-load EV charging scenarios. Modeled voltage fluctuations and harmonic distortion introduced by rapid charging stations, proposing a smart-grid algorithm to balance load distribution dynamically.
+                </p>
+            </div>
+
+            <!-- CERN -->
+            <div class="tech-box">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>CERN Collaborative Proposal</h3>
+                    <a href="CERN_Research_Proposal.pdf" target="_blank" style="color: var(--accent-orange); border: 1px solid var(--accent-orange); padding: 5px 10px; font-size: 0.8rem;">VIEW PDF</a>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                    Proposed a non-invasive plasma diagnostic method using Cherenkov radiation to map plasma density. This research explores how plasma-induced refractive index variations affect radiation patterns, offering a potential breakthrough in monitoring fusion reactor stability.
+                </p>
+            </div>
+        </section>
+
+        <!-- Journey / Timeline -->
         <section id="journey" class="section">
             <div class="section-header">
-                <span class="section-number">02.</span>
-                <h2 class="section-title">MY JOURNEY</h2>
+                <div class="section-marker"></div>
+                <h2>PROFESSIONAL_JOURNEY</h2>
             </div>
 
             <div class="timeline">
-                <!-- Scriptex -->
                 <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="glass-card timeline-content">
-                        <div class="timeline-header">
-                            <h3>Founder & CEO @ Scriptex.ai</h3>
-                            <span class="timeline-date">Present</span>
-                        </div>
-                        <p class="timeline-location">Pune, India</p>
-                        <p class="timeline-desc">
-                            Built an agentic AI research incubator to optimize workflows for student researchers. Developed full-stack platform, facilitated 5+ papers, and partnered with 5 schools onboarding 145+ students.
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">PRESENT</span>
+                        <h4>Founder & CEO @ Scriptex.ai</h4>
+                        <p style="color: var(--text-secondary); margin-top: 10px;">
+                            Built and launched an agentic AI research incubator. Optimizes workflow structure for high-school and undergraduate researchers. Facilitated 5+ quality research papers; partnered with 5 schools onboarding 145+ students.
                         </p>
                     </div>
                 </div>
 
-                <!-- Doppler Racing -->
                 <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="glass-card timeline-content">
-                        <div class="timeline-header">
-                            <h3>Captain @ Doppler Racing</h3>
-                            <span class="timeline-date">2023 - 2024</span>
-                        </div>
-                        <p class="timeline-location">F1 in Schools | National Champions</p>
-                        <p class="timeline-desc">
-                            Led 8-member team to win 'Best Engineered Car' at nationals. Raised ₹31L+ in sponsorship, managed CAD/CFD/FEA workflows, and set competition track record (1.144s).
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2023 - 2024</span>
+                        <h4>Captain @ Doppler Racing</h4>
+                        <p style="color: var(--text-secondary); margin-top: 10px;">
+                            Led 8-member team to win <span class="highlight-orange">Best Engineered Car</span> at F1 in Schools Nationals. Raised ₹31L+ (~$37k) in sponsorships (ANSYS, SolidWorks). Set competition record (1.144s for 20m).
                         </p>
                     </div>
                 </div>
 
-                <!-- Prototech Intern -->
                 <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="glass-card timeline-content">
-                        <div class="timeline-header">
-                            <h3>SWE Intern @ Prototech Solutions</h3>
-                            <span class="timeline-date">2023</span>
-                        </div>
-                        <p class="timeline-location">Pune, India</p>
-                        <p class="timeline-desc">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2023</span>
+                        <h4>SWE Intern @ Prototech Solutions</h4>
+                        <p style="color: var(--text-secondary); margin-top: 10px;">
                             Developed patent-pending computer vision software for unconstrained image dimensioning using Python & OpenCV. Achieved 2cm accuracy without calibration targets.
                         </p>
                     </div>
                 </div>
 
-                <!-- Astrophysics Intern -->
                 <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="glass-card timeline-content">
-                        <div class="timeline-header">
-                            <h3>Astrophysics Research Intern</h3>
-                            <span class="timeline-date">2023</span>
-                        </div>
-                        <p class="timeline-location">Remote</p>
-                        <p class="timeline-desc">
-                            Analyzed stellar photometry and Type Ia supernovae light curves to derive Hubble constant. Validated cosmological topology models using Python data analysis.
-                        </p>
-                    </div>
-                </div>
-
-                 <!-- Makers Club -->
-                 <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="glass-card timeline-content">
-                        <div class="timeline-header">
-                            <h3>Founder @ Makers Club</h3>
-                            <span class="timeline-date">2021 - Present</span>
-                        </div>
-                        <p class="timeline-location">School Community</p>
-                        <p class="timeline-desc">
-                            Established 60+ member STEM community. Mentored teams for international competitions, taught CAD/Arduino, and built robotic systems.
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2023</span>
+                        <h4>Astrophysics Research Intern</h4>
+                        <p style="color: var(--text-secondary); margin-top: 10px;">
+                            Analyzed stellar photometry and Type Ia supernovae light curves to derive the Hubble constant. Validated cosmological topology models under Astrophysicist Mr. Abhishek Mohapatra.
                         </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Skills Section -->
-        <section id="skills" class="section">
+        <!-- Gallery / Archive -->
+        <section id="gallery" class="section">
             <div class="section-header">
-                <span class="section-number">03.</span>
-                <h2 class="section-title">TECHNICAL ARSENAL</h2>
+                <div class="section-marker"></div>
+                <h2>THE_ARCHIVE</h2>
             </div>
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
 
-            <div class="skills-grid">
-                <!-- Languages & Core -->
-                <div class="glass-card skill-category">
-                    <h3 class="skill-title">Languages & Core</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">C++</span>
-                        <span class="skill-tag">R</span>
-                        <span class="skill-tag">Matlab</span>
-                        <span class="skill-tag">SQL</span>
-                        <span class="skill-tag">HTML/CSS</span>
-                    </div>
-                </div>
-
-                <!-- Engineering & Simulation -->
-                <div class="glass-card skill-category">
-                    <h3 class="skill-title">Engineering & Simulation</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">SolidWorks</span>
-                        <span class="skill-tag">Ansys Fluent</span>
-                        <span class="skill-tag">Fusion 360</span>
-                        <span class="skill-tag">AutoCAD</span>
-                        <span class="skill-tag">CFD</span>
-                        <span class="skill-tag">FEA</span>
-                        <span class="skill-tag">3D Printing</span>
-                    </div>
-                </div>
-
-                <!-- Data & AI -->
-                <div class="glass-card skill-category">
-                    <h3 class="skill-title">Data Science & AI</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Pandas</span>
-                        <span class="skill-tag">NumPy</span>
-                        <span class="skill-tag">OpenCV</span>
-                        <span class="skill-tag">TensorFlow</span>
-                        <span class="skill-tag">LLMs</span>
-                        <span class="skill-tag">Git</span>
-                        <span class="skill-tag">React</span>
-                        <span class="skill-tag">Node.js</span>
-                    </div>
+        <!-- Contact -->
+        <section id="contact" class="section" style="margin-bottom: 50px;">
+            <div class="tech-box" style="text-align: center;">
+                <h2 style="margin-bottom: 20px;">INITIATE_UPLINK</h2>
+                <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                    <a href="mailto:hemangkeswani@gmail.com" style="font-size: 1.2rem; color: var(--accent-orange);">hemangkeswani@gmail.com</a>
+                    <a href="https://linkedin.com/in/hemang-keswani" target="_blank" style="color: var(--text-primary);">linkedin.com/in/hemang-keswani</a>
+                    <a href="https://github.com/HemangKeswani12" target="_blank" style="color: var(--text-primary);">github.com/HemangKeswani12</a>
                 </div>
             </div>
         </section>
 
-        <!-- Academics Section (Added back but restyled) -->
-        <section id="academics" class="section">
-            <div class="section-header">
-                <span class="section-number">04.</span>
-                <h2 class="section-title">ACADEMICS</h2>
-            </div>
-
-            <div class="academics-grid">
-                <div class="glass-card academic-card">
-                    <div class="academic-title">IB DIPLOMA</div>
-                    <div class="academic-score">43/45</div>
-                    <div class="academic-details">
-                        <div class="grade-item"><span>Math AA HL</span><span class="grade">7/7</span></div>
-                        <div class="grade-item"><span>Physics HL</span><span class="grade">7/7</span></div>
-                        <div class="grade-item"><span>CS HL</span><span class="grade">7/7</span></div>
-                        <div class="grade-item"><span>Chem SL</span><span class="grade">7/7</span></div>
-                    </div>
-                </div>
-
-                <div class="glass-card academic-card">
-                    <div class="academic-title">SAT SCORE</div>
-                    <div class="academic-score">1540</div>
-                    <div class="academic-details">
-                        <div class="grade-item"><span>Percentile</span><span class="grade">99th</span></div>
-                        <div class="grade-item"><span>Math</span><span class="grade">800</span></div>
-                        <div class="grade-item"><span>EBRW</span><span class="grade">740</span></div>
-                        <div class="grade-item"><span>Rank</span><span class="grade">#1</span></div>
-                    </div>
-                </div>
-
-                <div class="glass-card academic-card">
-                    <div class="academic-title">ICSE BOARD</div>
-                    <div class="academic-score">95.2%</div>
-                    <div class="academic-details">
-                        <div class="grade-item"><span>Math</span><span class="grade">97%</span></div>
-                        <div class="grade-item"><span>Comp Apps</span><span class="grade">96%</span></div>
-                        <div class="grade-item"><span>Science</span><span class="grade">93%</span></div>
-                        <div class="grade-item"><span>French</span><span class="grade">95%</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="section">
-            <div class="glass-card contact-card">
-                <h2 class="section-title" style="margin-bottom: 10px; text-align: center;">GET IN TOUCH</h2>
-                <p class="contact-subtitle">Let's build something amazing together.</p>
-                
-                <div class="contact-links">
-                    <a href="mailto:hemangkeswani@gmail.com" class="contact-link">
-                        <div class="link-icon">@</div>
-                        <span>hemangkeswani@gmail.com</span>
-                    </a>
-                    <a href="https://linkedin.com/in/hemang-keswani" target="_blank" class="contact-link">
-                        <div class="link-icon">in</div>
-                        <span>linkedin.com/in/hemang-keswani</span>
-                    </a>
-                    <a href="https://github.com/HemangKeswani12" target="_blank" class="contact-link">
-                        <div class="link-icon">gh</div>
-                        <span>github.com/HemangKeswani12</span>
-                    </a>
-                </div>
-            </div>
-        </section>
+        <footer style="text-align: center; padding: 20px; border-top: 1px solid #333; color: #555; font-size: 0.8rem;">
+            SYSTEM ONLINE // HEMANG KESWANI // 2025
+        </footer>
 
     </div>
 
-    <footer class="footer">
-        <p>© 2025 Hemang Keswani. Built with 🧡 & 💜.</p>
-    </footer>
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <div class="modal-media" id="modalMedia"></div>
+            <div class="modal-details">
+                <h3 id="modalTitle" style="color: var(--accent-orange); margin-bottom: 10px;"></h3>
+                <p id="modalCategory" style="color: var(--accent-purple); font-size: 0.9rem; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;"></p>
+                <p id="modalDescription" style="color: var(--text-secondary);"></p>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

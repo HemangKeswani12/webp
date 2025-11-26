@@ -1,629 +1,413 @@
-// ============================================================================
-// CIRCUIT BOARD BACKGROUND ANIMATION (Electronics Theme)
-// ============================================================================
+// =============================================================================
+// ELECTRONIC CIRCUIT ANIMATION
+// =============================================================================
 const canvas = document.getElementById('circuit-canvas');
-const ctx = canvas ? canvas.getContext('2d') : null;
+const ctx = canvas.getContext('2d');
 
 let width, height;
+let particles = [];
 let nodes = [];
-let connections = [];
-const nodeCount = 40;
-let mouse = { x: -1000, y: -1000 };
 
-function initCanvas() {
-    if (!canvas) return;
+// Configuration
+const GRID_SIZE = 40;
+const PARTICLE_COUNT = 40;
+const NODE_COUNT = 20;
+const WIRE_COLOR = 'rgba(230, 126, 34, 0.3)'; // Orange-ish
+const NODE_COLOR = 'rgba(155, 89, 182, 0.5)'; // Purple-ish
+
+function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
 }
 
-// Node represents circuit board connection points
 class Node {
-    constructor(x, y, type) {
-        this.x = x;
-        this.y = y;
-        this.baseX = x;
-        this.baseY = y;
-        this.type = type || Math.random() > 0.5 ? 'resistor' : 'capacitor';
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
-        this.size = 4;
-        this.pulsePhase = Math.random() * Math.PI * 2;
-        this.connected = [];
+    constructor() {
+        // Snap to grid
+        this.x = Math.floor(Math.random() * (width / GRID_SIZE)) * GRID_SIZE;
+        this.y = Math.floor(Math.random() * (height / GRID_SIZE)) * GRID_SIZE;
+        this.size = Math.random() * 3 + 2;
+        this.pulse = 0;
+        this.pulseSpeed = 0.05 + Math.random() * 0.05;
+    }
+
+    draw() {
+        this.pulse += this.pulseSpeed;
+        const glow = Math.sin(this.pulse) * 0.5 + 0.5; // 0 to 1
+        
+        ctx.fillStyle = NODE_COLOR;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Glow ring
+        ctx.strokeStyle = `rgba(155, 89, 182, ${glow * 0.3})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size + 4 + (glow * 2), 0, Math.PI * 2);
+        ctx.stroke();
+    }
+}
+
+class Electron {
+    constructor() {
+        this.reset();
+    }
+
+    reset() {
+        this.x = Math.floor(Math.random() * (width / GRID_SIZE)) * GRID_SIZE;
+        this.y = Math.floor(Math.random() * (height / GRID_SIZE)) * GRID_SIZE;
+        // Random direction: 0=right, 1=down, 2=left, 3=up
+        this.dir = Math.floor(Math.random() * 4);
+        this.speed = 2; // Pixels per frame
+        this.history = [];
+        this.maxLength = 20 + Math.random() * 30;
+        this.life = 0;
+        this.maxLife = 100 + Math.random() * 100;
     }
 
     update() {
-        // Gentle drift
-        this.x += this.vx;
-        this.y += this.vy;
-
-        // Mouse interaction - repel
-        const dx = mouse.x - this.x;
-        const dy = mouse.y - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 150;
-
-        if (distance < maxDistance) {
-            const force = (maxDistance - distance) / maxDistance;
-            this.x -= (dx / distance) * force * 3;
-            this.y -= (dy / distance) * force * 3;
-        } else {
-            // Return to base position
-            this.x += (this.baseX - this.x) * 0.02;
-            this.y += (this.baseY - this.y) * 0.02;
+        this.life++;
+        if (this.life > this.maxLife) {
+            this.reset();
+            return;
         }
 
-        // Boundaries
+        // Store history for trail
+        this.history.push({ x: this.x, y: this.y });
+        if (this.history.length > this.maxLength) {
+            this.history.shift();
+        }
+
+        // Move
+        if (this.dir === 0) this.x += this.speed;
+        else if (this.dir === 1) this.y += this.speed;
+        else if (this.dir === 2) this.x -= this.speed;
+        else if (this.dir === 3) this.y -= this.speed;
+
+        // Random turn at grid intersections
+        if (this.x % GRID_SIZE === 0 && this.y % GRID_SIZE === 0) {
+            if (Math.random() < 0.2) { // 20% chance to turn
+                this.dir = Math.floor(Math.random() * 4);
+            }
+        }
+
+        // Wrap around
         if (this.x < 0) this.x = width;
         if (this.x > width) this.x = 0;
         if (this.y < 0) this.y = height;
         if (this.y > height) this.y = 0;
-
-        this.pulsePhase += 0.02;
     }
 
     draw() {
-        const pulse = Math.sin(this.pulsePhase) * 0.3 + 0.7;
-        
-        // Draw node as a small circle
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 140, 66, ${pulse * 0.6})`;
-        ctx.fill();
-        
-        // Outer glow
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size + 2, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(157, 127, 245, ${pulse * 0.3})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
+        if (this.history.length < 2) return;
 
-        // Draw component symbol
-        if (this.type === 'resistor') {
-            this.drawResistor();
-        } else {
-            this.drawCapacitor();
+        ctx.beginPath();
+        ctx.moveTo(this.history[0].x, this.history[0].y);
+        for (let i = 1; i < this.history.length; i++) {
+            ctx.lineTo(this.history[i].x, this.history[i].y);
         }
-    }
-
-    drawResistor() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.strokeStyle = 'rgba(255, 140, 66, 0.4)';
+        ctx.strokeStyle = WIRE_COLOR;
         ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(-8, 0);
-        ctx.lineTo(-4, -3);
-        ctx.lineTo(0, 3);
-        ctx.lineTo(4, -3);
-        ctx.lineTo(8, 0);
         ctx.stroke();
-        ctx.restore();
-    }
 
-    drawCapacitor() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.strokeStyle = 'rgba(157, 127, 245, 0.4)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(-2, -6);
-        ctx.lineTo(-2, 6);
-        ctx.moveTo(2, -6);
-        ctx.lineTo(2, 6);
-        ctx.stroke();
-        ctx.restore();
+        // Head
+        ctx.fillStyle = '#e67e22'; // Orange head
+        ctx.fillRect(this.x - 1, this.y - 1, 3, 3);
     }
 }
 
-// Connection represents circuit wires
-class Connection {
-    constructor(nodeA, nodeB) {
-        this.nodeA = nodeA;
-        this.nodeB = nodeB;
-        this.signal = 0;
-        this.signalSpeed = 0.05 + Math.random() * 0.05;
-    }
-
-    update() {
-        this.signal += this.signalSpeed;
-        if (this.signal > 1) this.signal = 0;
-    }
-
-    draw() {
-        const dx = this.nodeB.x - this.nodeA.x;
-        const dy = this.nodeB.y - this.nodeA.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance > 400) return; // Don't draw very long connections
-
-        // Draw wire as straight line
-        ctx.beginPath();
-        ctx.moveTo(this.nodeA.x, this.nodeA.y);
-        ctx.lineTo(this.nodeB.x, this.nodeB.y);
-        
-        const opacity = 1 - (distance / 400);
-        ctx.strokeStyle = `rgba(120, 100, 140, ${opacity * 0.3})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        // Draw signal traveling along wire
-        const signalX = this.nodeA.x + dx * this.signal;
-        const signalY = this.nodeA.y + dy * this.signal;
-        
-        ctx.beginPath();
-        ctx.arc(signalX, signalY, 2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 140, 66, ${opacity * 0.8})`;
-        ctx.fill();
-    }
-}
-
-// Initialize nodes in a grid-like pattern
-function initNodes() {
+function init() {
+    resize();
+    particles = [];
     nodes = [];
-    connections = [];
-    
-    const cols = Math.ceil(Math.sqrt(nodeCount * (width / height)));
-    const rows = Math.ceil(nodeCount / cols);
-    const spacingX = width / (cols + 1);
-    const spacingY = height / (rows + 1);
 
-    for (let i = 0; i < nodeCount; i++) {
-        const col = i % cols;
-        const row = Math.floor(i / cols);
-        const x = spacingX * (col + 1) + (Math.random() - 0.5) * 50;
-        const y = spacingY * (row + 1) + (Math.random() - 0.5) * 50;
-        nodes.push(new Node(x, y));
+    for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push(new Node());
     }
 
-    // Create connections between nearby nodes
-    for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-            const dx = nodes[i].x - nodes[j].x;
-            const dy = nodes[i].y - nodes[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < 200 && Math.random() > 0.7) {
-                connections.push(new Connection(nodes[i], nodes[j]));
-            }
-        }
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(new Electron());
     }
 }
 
-// Animation loop
 function animate() {
-    if (!ctx) return;
-    
-    // Clear with slight trail effect
-    ctx.fillStyle = 'rgba(10, 10, 15, 0.1)';
-    ctx.fillRect(0, 0, width, height);
+    // Clear with slight trails? No, clear fully for clean look
+    ctx.clearRect(0, 0, width, height);
 
-    // Update and draw connections
-    connections.forEach(conn => {
-        conn.update();
-        conn.draw();
-    });
-
-    // Update and draw nodes
-    nodes.forEach(node => {
-        node.update();
-        node.draw();
+    nodes.forEach(n => n.draw());
+    particles.forEach(p => {
+        p.update();
+        p.draw();
     });
 
     requestAnimationFrame(animate);
 }
 
-// Event Listeners
-window.addEventListener('resize', () => {
-    initCanvas();
-    initNodes();
-});
+window.addEventListener('resize', init);
+init();
+animate();
 
-window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-});
 
-// Start circuit animation
-if (canvas) {
-    initCanvas();
-    initNodes();
-    animate();
+// =============================================================================
+// NAVIGATION & UI
+// =============================================================================
+
+function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    // Update active state
+    document.querySelectorAll('.index-item').forEach(item => item.classList.remove('active'));
+    event.target.classList.add('active');
 }
 
-// ============================================================================
-// SMOOTH SCROLL FOR NAVIGATION
-// ============================================================================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+// Intersection Observer for Active Index
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const id = entry.target.id;
+            document.querySelectorAll('.index-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('onclick').includes(id)) {
+                    item.classList.add('active');
+                }
             });
         }
     });
-});
+}, { threshold: 0.3 });
 
-// ============================================================================
-// NAVBAR SCROLL EFFECT
-// ============================================================================
-let lastScroll = 0;
-const navbar = document.querySelector('.navbar');
+document.querySelectorAll('section').forEach(section => observer.observe(section));
 
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 100) {
-        navbar.style.padding = '15px 60px';
-        navbar.style.background = 'rgba(10, 10, 15, 0.95)';
-    } else {
-        navbar.style.padding = '20px 60px';
-        navbar.style.background = 'rgba(10, 10, 15, 0.9)';
-    }
-    
-    lastScroll = currentScroll;
-});
 
-// ============================================================================
-// GALLERY DATA (for gallery.html)
-// ============================================================================
+// =============================================================================
+// GALLERY LOGIC
+// =============================================================================
 const mediaItems = [
-    {
-        file: 'IEEE_research.pdf',
-        title: 'IEEE Research Paper',
-        category: 'Research',
-        description: 'Signal processing & neural optimization within Bayesian & RL frameworks. Achieved 42% improvement in signal-to-noise ratio. Nearing end of peer review.',
-        type: 'pdf'
-    },
-    {
-        file: 'main.pdf',
-        title: 'EV Grid Stability Research',
-        category: 'Research',
-        description: 'MDPI submission: Smart EV Charging Station Grid Infrastructure Stability. Statistical analysis of urban distribution grid under high-load scenarios. Analyzed 500+ charging events.',
-        type: 'pdf'
-    },
-    {
-        file: 'CERN_Research_Proposal.pdf',
-        title: 'CERN Proposal',
-        category: 'Research',
-        description: 'Novel plasma diagnostic method using Cherenkov radiation for non-invasive plasma density mapping in fusion reactors. Endorsed by Head of Physics at IISER Pune.',
-        type: 'pdf'
-    },
-    {
-        file: 'Citation_Principals_Award_Hemang.pdf',
-        title: 'Student of the Year',
-        category: 'Award',
-        description: 'Principal\'s Citation for excellence in academics, leadership, and community service. Recognition as #1 ranked student.',
-        type: 'pdf'
-    },
-    {
-        file: 'arssdc_trophy.jpg',
-        title: 'ARSSDC Runners-Up Trophy',
-        category: 'Aerospace',
-        description: 'Trophy from the Asian Regional Space Settlement Design Competition. Competed among 150 schools. Designed settlement for 10,000 inhabitants with life support, agriculture, and habitat systems.',
-        type: 'image'
-    },
-    {
-        file: 'arssdc_winner.png',
-        title: 'ARSSDC Award Announcement',
-        category: 'Aerospace',
-        description: 'Official award recognition for interdisciplinary design excellence. Balanced architecture, aerospace engineering, and economics within simulated NASA project.',
-        type: 'image'
-    },
-    {
-        file: 'principalsaward_2.jpg',
-        title: 'Principal\'s Award Ceremony',
-        category: 'Award',
-        description: 'Award photo representing consistent academic excellence and institutional trust in leadership qualities across all domains.',
-        type: 'image'
-    },
-    {
-        file: 'f1_nationals1.jpg',
-        title: 'Doppler Racing Nationals',
-        category: 'Engineering',
-        description: 'F1 in Schools National Finals. Led 8-member team to Best Engineered Car award. Competed against 120+ schools.',
-        type: 'image'
-    },
-    {
-        file: 'f1_nationals2.jpg',
-        title: 'Doppler Racing Team',
-        category: 'Engineering',
-        description: 'Team photo at nationals. Showcases collaboration across engineering, marketing, and finance divisions.',
-        type: 'image'
-    },
-    {
-        file: 'f1_nationals4.jpg',
-        title: 'Doppler Racing Booth',
-        category: 'Engineering',
-        description: 'Exhibition booth at nationals showcasing technical documentation, CAD models, and sponsorship portfolio.',
-        type: 'image'
-    },
-    {
-        file: 'f1_nationals5.jpg',
-        title: 'Doppler Racing Presentation',
-        category: 'Engineering',
-        description: 'Presenting engineering documentation and design process to judges. Demonstrated CFD analysis and manufacturing workflow.',
-        type: 'image'
-    },
-    {
-        file: 'f1_nationals3vid.mp4',
-        title: 'Record Car Run (1.144s)',
-        category: 'Engineering',
-        description: 'Video of custom-engineered car achieving 20m in 1.144 seconds, setting a competition record. Cd = 0.12 aerodynamic efficiency.',
-        type: 'video'
-    },
-    {
-        file: 'f1_materials.jpg',
-        title: 'Doppler Racing Materials',
-        category: 'Engineering',
-        description: 'Design and testing phases of car components. Documenting iterative problem-solving and material selection.',
-        type: 'image'
-    },
-    {
-        file: 'f1_materials2.jpg',
-        title: 'Doppler Racing CAD Models',
-        category: 'Engineering',
-        description: 'SolidWorks CAD models and technical drawings. Shows aerodynamic optimization and structural analysis.',
-        type: 'image'
-    },
-    {
-        file: 'f1_materials3.jpg',
-        title: 'Doppler Racing Manufacturing',
-        category: 'Engineering',
-        description: 'CNC machining and precision manufacturing. Built custom robot for micrometer-level component fabrication.',
-        type: 'image'
-    },
-    {
-        file: 'f1_regionals.jpg',
-        title: 'Doppler Regional Qualifiers',
-        category: 'Engineering',
-        description: 'Regional-level race visuals. Part of journey to nationals, showcasing early-stage ideation and team development.',
-        type: 'image'
-    },
-    {
-        file: 'f1_regionals2.jpg',
-        title: 'Regional Competition Setup',
-        category: 'Engineering',
-        description: 'Setting up for regional qualifiers. Testing track conditions and validating car performance.',
-        type: 'image'
-    },
-    {
-        file: 'f1_regionals3.jpg',
-        title: 'Regional Team Collaboration',
-        category: 'Engineering',
-        description: 'Team collaboration at regionals. Coordinating race strategy and technical adjustments.',
-        type: 'image'
-    },
-    {
-        file: 'f1_solarcar.jpg',
-        title: 'Solar Car Prototype',
-        category: 'Engineering',
-        description: 'Designed and tested solar-powered vehicle concept. Linking renewable energy systems with racing aerodynamics.',
-        type: 'image'
-    },
-    {
-        file: 'f1_solarcar2.jpg',
-        title: 'Solar Car Testing',
-        category: 'Engineering',
-        description: 'Testing solar car prototype. Validating photovoltaic efficiency and power management systems.',
-        type: 'image'
-    },
-    {
-        file: 'IISER_visit.jpg',
-        title: 'IISER Pune Collaboration',
-        category: 'Research',
-        description: 'Meeting with IISER Pune Physics Department on CERN research proposal. Networking and interdisciplinary research coordination.',
-        type: 'image'
-    },
-    {
-        file: 'MU20_debate_asias_largest.jpg',
-        title: 'International Space UN Debate',
-        category: 'Leadership',
-        description: 'Outstanding Performance at Asia\'s largest international UN debate. Exemplifies communication, argumentation, and research articulation.',
-        type: 'image'
-    },
-    {
-        file: 'spUN_debate.png',
-        title: 'Space UN Debate Certificate',
-        category: 'Leadership',
-        description: 'Official recognition for Outstanding Performance. Reinforces excellence in academic debate and diplomacy.',
-        type: 'image'
-    },
-    {
-        file: 'orator.jpg',
-        title: 'Public Speaking',
-        category: 'Leadership',
-        description: 'Regional debate achievement from school annual event. Demonstrates ability to captivate an audience and articulate complex ideas.',
-        type: 'image'
-    },
-    {
-        file: 'clash_royale_10k_trophies.jpg',
-        title: 'Clash Royale: Top 2% Global',
-        category: 'Strategy',
-        description: 'Achieved 13,000+ trophies in Clash Royale, placing in top 2% of players globally. Demonstrates long-term strategic planning, meta-adaptation, and analytical thinking.',
-        type: 'image'
-    },
-    {
-        file: 'cr_deck.jpg',
-        title: 'Personal Strategy Deck',
-        category: 'Strategy',
-        description: 'Custom Clash Royale deck composition. Illustrates methodical planning and meta-adaptation, reflecting analytical traits useful in research.',
-        type: 'image'
-    },
-    {
-        file: 'Intro_to_gen_AI_course_certificate (1).pdf',
-        title: 'Introduction to Generative AI',
-        category: 'Certification',
-        description: 'Google Cloud certification in Generative AI fundamentals. Structured learning in AI concepts linking to applied AI projects.',
-        type: 'pdf'
-    },
-    {
-        file: 'rocketscience101.png',
-        title: 'Rocket Science 101',
-        category: 'Certification',
-        description: 'University of Michigan aerospace fundamentals course completion (98.2%). Advanced comprehension and self-driven learning.',
-        type: 'image'
-    },
-    {
-        file: 'other_certificates.pdf',
-        title: 'Miscellaneous Awards',
-        category: 'Certification',
-        description: 'Consolidated proof of academic, leadership, and extracurricular awards across various domains.',
-        type: 'pdf'
-    },
-    {
-        file: 'soccer1.jpg',
-        title: 'National Soccer Gold',
-        category: 'Sports',
-        description: 'National-level U17/U19 soccer gold medalist. Represents leadership, teamwork, and physical discipline. Balances academics with athletics.',
-        type: 'image'
-    },
-    {
-        file: 'soccer2.jpg',
-        title: 'Soccer Tournament',
-        category: 'Sports',
-        description: 'Match photo from national tournament. Team coordination and competitive excellence.',
-        type: 'image'
-    },
-    {
-        file: 'selfdefence_bluebelt.jpg',
-        title: 'Martial Arts Blue Belt',
-        category: 'Sports',
-        description: 'Blue Belt certification in martial arts. Indicates discipline, perseverance, and structured self-improvement through long-term practice.',
-        type: 'image'
-    },
-    {
-        file: 'laptop_cooling_proj.jpg',
-        title: 'Hardware Optimization Project',
-        category: 'Engineering',
-        description: 'Modified internal component layout to improve airflow and reduce laptop temperatures. Demonstrates pragmatic engineering problem-solving.',
-        type: 'image'
-    },
-    {
-        file: 'Im_adventurous.jpg',
-        title: 'Adventurous Spirit',
-        category: 'Personal',
-        description: 'Represents curiosity and openness to new experiences. Indicative of balanced, explorative mindset beyond academics.',
-        type: 'image'
-    },
-    {
-        file: 'im_goofy.jpg',
-        title: 'Goofy Side',
-        category: 'Personal',
-        description: 'Highlights authenticity and humor. Shows approachability and social ease within teams.',
-        type: 'image'
-    },
-    {
-        file: 'im_introspective.jpg',
-        title: 'Introspective Temperament',
-        category: 'Personal',
-        description: 'Reflects reflective temperament, thoughtfulness, and motivation-driven discipline. Key for research and independent work.',
-        type: 'image'
-    },
-    {
-        file: 'me_and_brother.jpg',
-        title: 'Family Bond',
-        category: 'Personal',
-        description: 'Personal grounding, empathy, and family values. Emphasizing balance between ambition and relationships.',
-        type: 'image'
-    },
-    {
-        file: 'me_and_frnds.jpg',
-        title: 'With Friends',
-        category: 'Personal',
-        description: 'Displays teamwork and camaraderie. Suggests strong interpersonal skills and sociability in collaborative settings.',
-        type: 'image'
-    },
-    {
-        file: 'me_grinding.jpg',
-        title: 'Focused Work Session',
-        category: 'Personal',
-        description: 'Snapshot from late-night build session. Captures work ethic, intensity, and consistency in hands-on engineering projects.',
-        type: 'image'
-    }
+     {
+         file: 'IEEE_research.pdf',
+         title: 'IEEE Research Paper',
+         category: 'Research',
+         description: 'Signal processing & neural optimization within Bayesian & RL frameworks. Includes analysis on noise reduction in high-frequency signal transmission.',
+         type: 'pdf'
+     },
+     {
+         file: 'main.pdf',
+         title: 'EV Grid Stability Research',
+         category: 'Research',
+         description: 'MDPI submission: Smart EV Charging Station Grid Infrastructure Stability. Statistical analysis of urban distribution grid under high-load scenarios. Analyzed 500+ charging events.',
+         type: 'pdf'
+     },
+     {
+         file: 'CERN_Research_Proposal.pdf',
+         title: 'CERN Proposal',
+         category: 'Research',
+         description: 'Plasma diagnostic method utilizing Cherenkov radiation for non-invasive mapping. Endorsed by the Head of Physics at IISER Pune.',
+         type: 'pdf'
+     },
+     {
+         file: 'Citation_Principals_Award_Hemang.pdf',
+         title: 'Student of the Year',
+         category: 'Award',
+         description: 'Principal\'s Citation for excellence in academics, leadership, and community service.',
+         type: 'pdf'
+     },
+     {
+         file: 'arssdc_trophy.jpg',
+         title: 'ARSSDC Runners-Up',
+         category: 'Aerospace',
+         description: 'Team trophy from the Asian Regional Space Settlement Design Competition. Designed a settlement for 10,000 inhabitants.',
+         type: 'image'
+     },
+     {
+         file: 'arssdc_winner.png',
+         title: 'ARSSDC Award',
+         category: 'Aerospace',
+         description: 'Recognition for interdisciplinary design excellence, balancing structural integrity with human-centric systems.',
+         type: 'image'
+     },
+     {
+         file: 'f1_nationals1.jpg',
+         title: 'Doppler Racing',
+         category: 'Engineering',
+         description: 'National Finals car submission. Won Best Engineer Award. Car achieved 20m in 1.144s.',
+         type: 'image'
+     },
+     {
+         file: 'f1_nationals3vid.mp4',
+         title: 'Record Car Run',
+         category: 'Engineering',
+         description: 'Video of the custom-engineered car setting a competition record on the track.',
+         type: 'video'
+     },
+     {
+         file: 'f1_solarcar.jpg',
+         title: 'Solar Car Prototype',
+         category: 'Engineering',
+         description: 'Experimental design linking renewable energy systems with racing aerodynamics.',
+         type: 'image'
+     },
+     {
+         file: 'clash_royale_10k_trophies.jpg',
+         title: 'Top 2% Global',
+         category: 'Strategy',
+         description: 'Achieved 13,000+ trophies in Clash Royale. Demonstrates long-term strategic planning and meta-adaptation.',
+         type: 'image'
+     },
+     {
+         file: 'Intro_to_gen_AI_course_certificate (1).pdf',
+         title: 'Gen AI Cert',
+         category: 'Certification',
+         description: 'Google Cloud certification in Generative AI fundamentals.',
+         type: 'pdf'
+     },
+     {
+         file: 'rocketscience101.png',
+         title: 'Rocket Science 101',
+         category: 'Certification',
+         description: 'University of Michigan aerospace fundamentals course (98.2%).',
+         type: 'image'
+     },
+     {
+         file: 'soccer1.jpg',
+         title: 'National Soccer',
+         category: 'Sports',
+         description: 'Gold medalist at U17/U19 National tournaments.',
+         type: 'image'
+     },
+     {
+         file: 'soccer2.jpg',
+         title: 'Soccer Tournament',
+         category: 'Sports',
+         description: 'Match photo from national tournament.',
+         type: 'image'
+     },
+     {
+         file: 'selfdefence_bluebelt.jpg',
+         title: 'Martial Arts',
+         category: 'Sports',
+         description: 'Blue Belt certification in Self Defense.',
+         type: 'image'
+     },
+     {
+         file: 'laptop_cooling_proj.jpg',
+         title: 'Laptop Cooling Mod',
+         category: 'Engineering',
+         description: 'Hardware modification to improve thermal efficiency of a laptop chassis.',
+         type: 'image'
+     },
+     {
+         file: 'IISER_visit.jpg',
+         title: 'IISER Collaboration',
+         category: 'Research',
+         description: 'Meeting with physics department regarding CERN proposal.',
+         type: 'image'
+     },
+     {
+         file: 'MU20_debate_asias_largest.jpg',
+         title: 'MU20 Debate',
+         category: 'Leadership',
+         description: 'Speaking at Asia\'s largest international debate conference.',
+         type: 'image'
+     }
 ];
 
-// Gallery population (only runs on gallery.html)
-document.addEventListener('DOMContentLoaded', () => {
-    const galleryContainer = document.querySelector('.gallery-grid');
-    const isGalleryPage = window.location.pathname.includes('gallery.html');
-
-    if (isGalleryPage && galleryContainer) {
-        mediaItems.forEach((item, index) => {
-            const el = document.createElement('div');
-            el.className = 'gallery-item';
-            
-            el.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.05}s`;
-            el.style.opacity = '0';
-
-            let contentHtml = '';
-            
-            if (item.type === 'image' || item.type === 'pdf') {
-                let src = item.file;
-                if(item.type === 'pdf') src = item.file.replace('.pdf', '.jpg');
-                
-                contentHtml = `<img src="${src}" alt="${item.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY4YzQyIiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0xMyAySDZhMiAyIDAgMCAwLTIgMnYxNmEyIDIgMCAwIDAgMiAyaDEyYTIgMiAwIDAgMCAyLTJWOUwxMyAyeiIvPjwvc3ZnPg=='">`;
-            } else if (item.type === 'video') {
-                contentHtml = `<video src="${item.file}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>`;
-            }
-
-            el.innerHTML = `
-                ${contentHtml}
-                <div class="gallery-overlay">
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
-                </div>
-            `;
-            
-            el.addEventListener('click', () => openModal(item));
-            galleryContainer.appendChild(el);
-        });
-    }
-});
-
-// Modal Logic
+const galleryGrid = document.getElementById('gallery-grid');
 const modal = document.getElementById('modal');
-const closeBtn = document.getElementById('closeBtn');
+const modalMedia = document.getElementById('modalMedia');
+const modalTitle = document.getElementById('modalTitle');
+const modalCategory = document.getElementById('modalCategory');
+const modalDesc = document.getElementById('modalDescription');
+
+function initGallery() {
+    if (!galleryGrid) return;
+    
+    galleryGrid.innerHTML = '';
+    
+    mediaItems.forEach((item, index) => {
+        const el = document.createElement('div');
+        el.className = 'gallery-item';
+        el.style.animationDelay = `${index * 0.1}s`;
+        
+        let mediaHtml = '';
+        
+        // Handle different media types
+        if (item.type === 'image' || item.type === 'pdf') {
+            let src = item.file;
+            // Fallback icon for PDFs if thumbnail fails (simplified logic)
+            if (item.type === 'pdf') {
+                 // Try to use a jpg thumbnail if it exists, else generic icon
+                 src = item.file.replace('.pdf', '.jpg'); 
+            }
+            
+            mediaHtml = `<img src="${src}" alt="${item.title}" onerror="this.src='https://placehold.co/400x400/111/e67e22?text=PDF/IMG'">`;
+        } else if (item.type === 'video') {
+            mediaHtml = `<video src="${item.file}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>`;
+        }
+
+        el.innerHTML = `
+            ${mediaHtml}
+            <div class="gallery-info">
+                <div style="color: var(--accent-purple); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 5px;">${item.category.toUpperCase()}</div>
+                <h3 style="font-size: 1rem; color: #fff; margin-bottom: 5px;">${item.title}</h3>
+            </div>
+        `;
+        
+        el.addEventListener('click', () => openModal(item));
+        galleryGrid.appendChild(el);
+    });
+}
 
 function openModal(item) {
-    if (!modal) return;
-    
-    const mediaBox = document.getElementById('modalMedia');
-    const title = document.getElementById('modalTitle');
-    const cat = document.getElementById('modalCategory');
-    const desc = document.getElementById('modalDescription');
-
-    mediaBox.innerHTML = '';
-    title.textContent = item.title;
-    cat.textContent = `[ ${item.category.toUpperCase()} ]`;
-    desc.textContent = item.description;
-
-    if (item.type === 'image') {
-        mediaBox.innerHTML = `<img src="${item.file}" style="width:100%; height:auto; display:block;">`;
-    } else if (item.type === 'video') {
-        mediaBox.innerHTML = `<video src="${item.file}" controls autoplay style="width:100%; height:auto; display:block;"></video>`;
-    } else if (item.type === 'pdf') {
-        mediaBox.innerHTML = `<embed src="${item.file}" type="application/pdf" style="width:100%; height:60vh;">`;
-    }
-
     modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-
-if (closeBtn) {
-    closeBtn.onclick = () => {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        document.getElementById('modalMedia').innerHTML = '';
-    };
-}
-
-window.onclick = (e) => {
-    if (e.target == modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        document.getElementById('modalMedia').innerHTML = '';
+    modalTitle.textContent = item.title;
+    modalCategory.textContent = item.category;
+    modalDesc.textContent = item.description;
+    
+    modalMedia.innerHTML = '';
+    
+    if (item.type === 'video') {
+        const video = document.createElement('video');
+        video.src = item.file;
+        video.controls = true;
+        video.autoplay = true;
+        modalMedia.appendChild(video);
+    } else if (item.type === 'pdf') {
+         const iframe = document.createElement('iframe');
+         iframe.src = item.file;
+         iframe.style.width = "100%";
+         iframe.style.height = "100%";
+         iframe.style.border = "none";
+         modalMedia.appendChild(iframe);
+    } else {
+        const img = document.createElement('img');
+        img.src = item.file;
+        // Fallback for PDF images in modal
+        img.onerror = function() { 
+            if(item.type === 'pdf') {
+                this.style.display='none';
+                const msg = document.createElement('a');
+                msg.href = item.file;
+                msg.textContent = "Click to View PDF";
+                msg.target = "_blank";
+                msg.style.color = "var(--accent-orange)";
+                modalMedia.appendChild(msg);
+            }
+        };
+        modalMedia.appendChild(img);
     }
-};
+}
+
+function closeModal() {
+    modal.style.display = 'none';
+    modalMedia.innerHTML = '';
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', initGallery);
