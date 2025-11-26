@@ -1,4 +1,4 @@
-// Media data with descriptions
+// Media data with descriptions and layout sizes
 const mediaItems = [
     {
         file: 'arssdc_trophy.jpg',
@@ -17,7 +17,7 @@ const mediaItems = [
         size: 'medium'
     },
     {
-        file: 'Citation_Principal\'s Award_Hemang.pdf',
+        file: 'Citation_Principals_Award_Hemang.pdf',
         title: 'Principal\'s Award Citation',
         category: 'Academic Recognition',
         description: 'Formal citation for being named Student of the Year 2024—acknowledging academics, leadership, and community contribution across all domains. This award represents consistent excellence across academics, extracurriculars, and community service throughout my school career.',
@@ -30,6 +30,22 @@ const mediaItems = [
         category: 'Academic Recognition',
         description: 'Award photo representing consistent academic excellence and institutional trust in leadership qualities. Being recognized as Student of the Year is a testament to balancing multiple responsibilities while maintaining high standards in all areas.',
         type: 'image',
+        size: 'medium'
+    },
+    {
+        file: 'CERN_Research_Proposal.pdf',
+        title: 'CERN Research Proposal',
+        category: 'Physics Research',
+        description: 'Detailed research proposal developed in collaboration with IISER Pune for potential work at CERN. Focuses on high-energy physics applications and sustainable energy theoretical frameworks.',
+        type: 'pdf',
+        size: 'large'
+    },
+    {
+        file: 'IEEE_research.pdf',
+        title: 'IEEE Research Paper',
+        category: 'Engineering Research',
+        description: 'Published research paper exploring advanced engineering concepts. Demonstrates academic rigor and contribution to the technical community.',
+        type: 'pdf',
         size: 'medium'
     },
     {
@@ -290,97 +306,118 @@ const mediaItems = [
     }
 ];
 
-// Populate gallery
-function createGallery() {
-    const gallery = document.getElementById('gallery');
+// Core Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const isGalleryPage = window.location.pathname.includes('gallery.html');
     
+    if (isGalleryPage) {
+        initGallery();
+        setupModal();
+    }
+});
+
+function initGallery() {
+    const gallery = document.getElementById('gallery');
+    if (!gallery) return;
+
     mediaItems.forEach((item, index) => {
         const galleryItem = document.createElement('div');
         galleryItem.className = `gallery-item size-${item.size || 'small'}`;
-        galleryItem.style.animationDelay = `${index * 0.05}s`;
         
+        // Animation delay
+        galleryItem.style.animation = `fadeInUp 0.6s ease-out backwards ${index * 0.05}s`;
+
+        // Media Content
         let mediaElement;
         if (item.type === 'image' || item.type === 'pdf') {
             mediaElement = document.createElement('img');
             if (item.type === 'pdf') {
-                mediaElement.src = item.file.replace('.pdf', '.jpg'); // Fallback thumbnail
-                // Try to use first page as preview, or a generic icon
+                // Fallback for PDF thumbnails - In real prod, generate thumbnails. 
+                // Here using a placeholder/icon strategy or finding a corresponding image if available
+                mediaElement.src = item.file.replace('.pdf', '.jpg'); 
                 mediaElement.onerror = function() {
-                    this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"%3E%3Cpath fill="%235a6d4c" d="M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48z"%3E%3C/path%3E%3C/svg%3E';
+                    // Fallback icon if .jpg doesn't exist
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY2YjM1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0IDJINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMnYtOWwtNS01eiIvPjxwb2x5bGluZSBwb2ludHM9IjE0IDIgMTQgOSAyMCA5Ii8+PC9zdmc+'; 
+                    this.style.padding = '40px';
+                    this.style.objectFit = 'contain';
+                    this.style.background = '#fff';
                 };
             } else {
                 mediaElement.src = item.file;
             }
             mediaElement.alt = item.title;
-            mediaElement.className = 'item-media';
         } else if (item.type === 'video') {
-            // For video, show a thumbnail
             mediaElement = document.createElement('video');
             mediaElement.src = item.file;
-            mediaElement.className = 'item-media';
             mediaElement.muted = true;
+            mediaElement.loop = true;
+            // Play on hover
+            galleryItem.addEventListener('mouseenter', () => mediaElement.play());
+            galleryItem.addEventListener('mouseleave', () => {
+                mediaElement.pause();
+                mediaElement.currentTime = 0;
+            });
         }
-        
-        const itemInfo = document.createElement('div');
-        itemInfo.className = 'item-info';
-        
-        const itemTitle = document.createElement('h3');
-        itemTitle.className = 'item-title';
-        itemTitle.textContent = item.title;
-        
-        const itemCategory = document.createElement('p');
-        itemCategory.className = 'item-category';
-        itemCategory.textContent = item.category;
-        
-        const viewText = document.createElement('div');
-        viewText.className = 'view-text';
-        viewText.textContent = 'View Details';
-        
-        itemInfo.appendChild(itemTitle);
-        itemInfo.appendChild(itemCategory);
-        
+
+        // Overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'gallery-overlay';
+        overlay.innerHTML = `
+            <h3 style="font-size: 1rem; margin-bottom: 5px;">${item.title}</h3>
+            <p style="font-size: 0.75rem; text-transform: uppercase; color: var(--highlight-green);">${item.category}</p>
+        `;
+
         galleryItem.appendChild(mediaElement);
-        galleryItem.appendChild(itemInfo);
-        galleryItem.appendChild(viewText);
-        
-        // Add click event
+        galleryItem.appendChild(overlay);
         galleryItem.addEventListener('click', () => openModal(item));
-        
         gallery.appendChild(galleryItem);
     });
 }
 
-// Modal functionality
+function setupModal() {
+    const modal = document.getElementById('modal');
+    const closeBtn = document.getElementById('closeBtn');
+
+    closeBtn.onclick = closeModal;
+    window.onclick = (event) => {
+        if (event.target == modal) closeModal();
+    };
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+}
+
 function openModal(item) {
     const modal = document.getElementById('modal');
-    const mediaContainer = document.getElementById('mediaContainer');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDescription = document.getElementById('modalDescription');
-    
-    // Clear previous content
+    const mediaContainer = document.getElementById('modalMedia');
+    const title = document.getElementById('modalTitle');
+    const category = document.getElementById('modalCategory');
+    const desc = document.getElementById('modalDescription');
+
     mediaContainer.innerHTML = '';
-    
-    // Create media element
-    let mediaElement;
+    title.textContent = item.title;
+    category.textContent = item.category;
+    desc.textContent = item.description;
+
     if (item.type === 'image') {
-        mediaElement = document.createElement('img');
-        mediaElement.src = item.file;
-        mediaElement.alt = item.title;
+        const img = document.createElement('img');
+        img.src = item.file;
+        mediaContainer.appendChild(img);
     } else if (item.type === 'video') {
-        mediaElement = document.createElement('video');
-        mediaElement.src = item.file;
-        mediaElement.controls = true;
-        mediaElement.autoplay = true;
+        const video = document.createElement('video');
+        video.src = item.file;
+        video.controls = true;
+        video.autoplay = true;
+        mediaContainer.appendChild(video);
     } else if (item.type === 'pdf') {
-        mediaElement = document.createElement('embed');
-        mediaElement.src = item.file;
-        mediaElement.type = 'application/pdf';
+        const embed = document.createElement('embed');
+        embed.src = item.file;
+        embed.type = 'application/pdf';
+        embed.style.width = '100%';
+        embed.style.height = '100%';
+        mediaContainer.appendChild(embed);
     }
-    
-    mediaContainer.appendChild(mediaElement);
-    modalTitle.textContent = item.title;
-    modalDescription.textContent = item.description;
-    
+
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
 }
@@ -389,39 +426,6 @@ function closeModal() {
     const modal = document.getElementById('modal');
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
-    
-    // Stop any playing videos
-    const videos = document.querySelectorAll('#mediaContainer video');
-    videos.forEach(video => {
-        video.pause();
-        video.currentTime = 0;
-    });
+    const mediaContainer = document.getElementById('modalMedia');
+    mediaContainer.innerHTML = ''; // Stop videos
 }
-
-// Event listeners
-document.getElementById('closeBtn').addEventListener('click', closeModal);
-window.addEventListener('click', (e) => {
-    const modal = document.getElementById('modal');
-    if (e.target === modal) {
-        closeModal();
-    }
-});
-
-// Keyboard navigation
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeModal();
-    }
-});
-
-// Initialize gallery on page load
-window.addEventListener('DOMContentLoaded', createGallery);
-
-// Add parallax effect to title
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('.header');
-    const scrolled = window.pageYOffset;
-    header.style.transform = `translateY(${scrolled * 0.5}px)`;
-    header.style.opacity = 1 - (scrolled / 500);
-});
-

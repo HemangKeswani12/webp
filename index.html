@@ -3,37 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hemang Keswani - Journey</title>
+    <title>Hemang Keswani | Engineering, Enterprise, Empathy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="logo">
-        <div class="logo-name">Hemang Keswani</div>
-        <div class="logo-tagline">Engineering, Enterprise, Empathy.</div>
-    </div>
+    <nav class="top-bar">
+        <div class="logo-area">
+            <div class="logo-name">Hemang Keswani</div>
+            <div class="logo-tagline">Engineering, Enterprise, Empathy.</div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="active">HOME</a>
+            <a href="gallery.html">GALLERY</a>
+        </div>
+    </nav>
 
-    <div class="container">
-        <header class="header">
-            <h1 class="main-title">this page is messy</h1>
-            <p class="subtitle">but it portrays me as a person, so stick along for a journey</p>
-        </header>
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="holo-text">Revolutionizing Tech <br>to be More Human.</h1>
+            <p>Exploring the intersection of nuclear power, space-based energy, and sustainable systems. I build to bridge the gap between ambitious engineering and human-centric design.</p>
+            
+            <div class="contact-bar">
+                <a href="https://linkedin.com/in/hemang-keswani" class="contact-pill">LinkedIn</a>
+                <a href="mailto:contact@hemangkeswani.com" class="contact-pill">Email</a> <!-- Placeholder email -->
+                <a href="https://github.com/HemangKeswani12" class="contact-pill">GitHub</a>
+            </div>
+        </section>
 
-        <div class="gallery" id="gallery"></div>
-    </div>
-
-    <!-- Modal for detailed view -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeBtn">&times;</span>
-            <div class="modal-body">
-                <div class="media-container" id="mediaContainer"></div>
-                <div class="description-container">
-                    <h2 id="modalTitle"></h2>
-                    <p id="modalDescription"></p>
+        <!-- About Me -->
+        <section class="about-section glass-panel">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="vision-box">
+                    <p class="about-text">
+                        I dream of a future where technology isn't just a tool, but an extension of our humanity. My passion lies in sustainable energy management—specifically harnessing the immense potential of nuclear power and pioneering space-based energy production systems like Dyson swarms. 
+                        <br><br>
+                        I believe that the energy crisis is not a resource problem, but an engineering challenge waiting for a human solution. My work strives to make these complex systems accessible, safe, and integrated into the fabric of our daily lives.
+                    </p>
                 </div>
+                <div>
+                    <p class="about-text">
+                        From leading engineering teams in F1 in Schools to debating international space policy, I approach every problem with a mix of technical rigor and creative empathy. Whether I'm optimizing laptop cooling systems or strategizing in Clash Royale, I am driven by a desire to understand systems deeply and improve them for the people who use them.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research & Projects -->
+        <section class="about-section">
+            <h2 class="section-title">Research & Innovation</h2>
+            <div class="list-grid">
+                <div class="glass-panel list-item">
+                    <div class="category">Physics & Energy</div>
+                    <h3>CERN Research Proposal</h3>
+                    <p>Collaborated with IISER Pune to propose research at CERN. Focused on high-energy physics and its applications in sustainable energy systems.</p>
+                </div>
+                <div class="glass-panel list-item">
+                    <div class="category">Aerospace</div>
+                    <h3>ARSSDC Space Settlement</h3>
+                    <p>Runner-up at the Asian Regional Space Settlement Design Competition. Led the systems engineering for a viable orbital habitat for 10,000 residents.</p>
+                </div>
+                <div class="glass-panel list-item">
+                    <div class="category">Engineering</div>
+                    <h3>F1 in Schools (Doppler Racing)</h3>
+                    <p>National Best Engineer Award. Designed and manufactured a miniature F1 car that raced 20m in 1.144s using CFD and wind tunnel testing.</p>
+                </div>
+                <div class="glass-panel list-item">
+                    <div class="category">Hardware</div>
+                    <h3>Laptop Cooling Optimization</h3>
+                    <p>Custom-engineered internal airflow modifications to reduce thermal throttling in high-performance laptops, extending hardware lifespan.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Honors & Activities -->
+        <section class="about-section">
+            <h2 class="section-title">Honors & Leadership</h2>
+            <div class="list-grid">
+                <div class="glass-panel list-item">
+                    <div class="category">Leadership</div>
+                    <h3>Student of the Year 2024</h3>
+                    <p>Principal's Award Citation for excellence in academics, leadership, and community contribution. A testament to balancing ambition with empathy.</p>
+                </div>
+                <div class="glass-panel list-item">
+                    <div class="category">Debate</div>
+                    <h3>Outstanding Performance</h3>
+                    <p>International Space UN Debate. Recognized for articulating complex space policy and international cooperation frameworks.</p>
+                </div>
+                <div class="glass-panel list-item">
+                    <div class="category">Sports</div>
+                    <h3>National Football Player</h3>
+                    <p>Represented the state in U17/U19 National tournaments. Learned discipline, teamwork, and strategic thinking on the field.</p>
+                </div>
+                <div class="glass-panel list-item">
+                    <div class="category">Gaming</div>
+                    <h3>Global Top Ranking</h3>
+                    <p>Clash Royale 10K Trophies. Achieved top-tier global ranking through analytical meta-gaming and long-term strategic planning.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal (Hidden on index, but kept for structure if needed) -->
+    <div class="modal" id="modal">
+        <span class="close-btn" id="closeBtn">&times;</span>
+        <div class="modal-content">
+            <div class="modal-media" id="modalMedia"></div>
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p class="tech-font" id="modalCategory"></p>
+                <p id="modalDescription"></p>
             </div>
         </div>
     </div>
@@ -41,4 +124,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
