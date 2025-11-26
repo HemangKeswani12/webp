@@ -1,12 +1,12 @@
 // -----------------------------------------------------------------------------
-// DYNAMIC CANVAS BACKGROUND (High Contrast Dark Mode)
+// DYNAMIC CANVAS BACKGROUND (Retro Tech Dark Mode)
 // -----------------------------------------------------------------------------
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 
 let width, height;
 let particles = [];
-const particleCount = 200; // Increased density
+const particleCount = 180; // Dense but distinct
 let mouse = { x: -1000, y: -1000 };
 
 function initCanvas() {
@@ -18,41 +18,45 @@ class Particle {
     constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.8; // Faster movement
-        this.vy = (Math.random() - 0.5) * 0.8;
-        this.size = Math.random() * 2.5 + 1;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.size = Math.random() * 2 + 1;
         this.baseX = this.x;
         this.baseY = this.y;
-        this.density = (Math.random() * 40) + 1;
+        // Random opacity for depth
+        this.alpha = Math.random() * 0.5 + 0.2;
     }
 
     update() {
         this.x += this.vx;
         this.y += this.vy;
 
-        // Stronger mouse interaction
+        // Mouse Interaction
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const forceDirectionX = dx / distance;
-        const forceDirectionY = dy / distance;
-        const maxDistance = 250; // Larger radius
-        const force = (maxDistance - distance) / maxDistance;
+        const maxDistance = 200;
 
         if (distance < maxDistance) {
-            this.x -= forceDirectionX * force * this.density * 3;
-            this.y -= forceDirectionY * force * this.density * 3;
+            const forceDirectionX = dx / distance;
+            const forceDirectionY = dy / distance;
+            const force = (maxDistance - distance) / maxDistance;
+            // Push away
+            this.x -= forceDirectionX * force * 2;
+            this.y -= forceDirectionY * force * 2;
         } else {
+            // Return to flow
             if (this.x !== this.baseX) {
                 const dx = this.x - this.baseX;
-                this.x -= dx/40;
+                this.x -= dx/60;
             }
             if (this.y !== this.baseY) {
                 const dy = this.y - this.baseY;
-                this.y -= dy/40;
+                this.y -= dy/60;
             }
         }
 
+        // Screen Wrapping
         if (this.x > width) this.x = 0;
         if (this.x < 0) this.x = width;
         if (this.y > height) this.y = 0;
@@ -60,10 +64,9 @@ class Particle {
     }
 
     draw() {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // Brighter particles
+        ctx.fillStyle = `rgba(200, 200, 200, ${this.alpha})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.closePath();
         ctx.fill();
     }
 }
@@ -71,13 +74,14 @@ class Particle {
 function connect() {
     for (let a = 0; a < particles.length; a++) {
         for (let b = a; b < particles.length; b++) {
-            let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x))
-                + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
+            let dx = particles[a].x - particles[b].x;
+            let dy = particles[a].y - particles[b].y;
+            let distance = dx * dx + dy * dy;
             
-            if (distance < (width/7) * (height/7)) {
-                let opacityValue = 1 - (distance/15000);
-                // Sharp white lines
-                ctx.strokeStyle = `rgba(255, 255, 255, ${opacityValue * 0.3})`; 
+            // Connect close particles
+            if (distance < (width/9) * (height/9)) {
+                let opacityValue = 1 - (distance/12000);
+                ctx.strokeStyle = `rgba(100, 100, 100, ${opacityValue * 0.4})`;
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(particles[a].x, particles[a].y);
@@ -98,12 +102,11 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
+// Event Listeners
 window.addEventListener('resize', () => {
     initCanvas();
     particles = [];
-    for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-    }
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 });
 
 window.addEventListener('mousemove', (e) => {
@@ -111,404 +114,199 @@ window.addEventListener('mousemove', (e) => {
     mouse.y = e.y;
 });
 
+// Start Animation
 initCanvas();
-for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-}
+for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 animate();
 
 
 // -----------------------------------------------------------------------------
-// GALLERY & MEDIA LOGIC
+// GALLERY DATA & LOGIC
 // -----------------------------------------------------------------------------
 const mediaItems = [
     {
+        file: 'IEEE_research.pdf',
+        title: 'IEEE Research Paper',
+        category: 'Research',
+        description: 'Signal processing & neural optimization within Bayesian & RL frameworks. Includes analysis on noise reduction in high-frequency signal transmission.',
+        type: 'pdf'
+    },
+    {
+        file: 'CERN_Research_Proposal.pdf',
+        title: 'CERN Proposal',
+        category: 'Research',
+        description: 'Plasma diagnostic method utilizing Cherenkov radiation for non-invasive mapping. Endorsed by the Head of Physics at IISER Pune.',
+        type: 'pdf'
+    },
+    {
         file: 'arssdc_trophy.jpg',
-        title: 'ARSSDC Trophy',
-        category: 'Space Settlement',
-        description: 'Runners-up among 150 schools. A testament to engineering teamwork and systems design under pressure.',
+        title: 'ARSSDC Runners-Up',
+        category: 'Aerospace',
+        description: 'Team trophy from the Asian Regional Space Settlement Design Competition. Designed a settlement for 10,000 inhabitants.',
         type: 'image'
     },
     {
         file: 'arssdc_winner.png',
         title: 'ARSSDC Award',
-        category: 'Space Settlement',
-        description: 'Official recognition of our interdisciplinary design balancing architecture, aerospace, and economics.',
-        type: 'image'
-    },
-    {
-        file: 'Citation_Principals_Award_Hemang.pdf',
-        title: 'Principal\'s Citation',
-        category: 'Academic Honor',
-        description: 'Student of the Year 2024. Acknowledging academics, leadership, and community contribution.',
-        type: 'pdf'
-    },
-    {
-        file: 'principalsaward_2.jpg',
-        title: 'Award Ceremony',
-        category: 'Academic Honor',
-        description: 'Receiving the Principal\'s Award, representing consistent academic excellence.',
-        type: 'image'
-    },
-    {
-        file: 'CERN_Research_Proposal.pdf',
-        title: 'CERN Proposal',
-        category: 'Physics Research',
-        description: 'Research proposal for high-energy physics applications in sustainable energy.',
-        type: 'pdf'
-    },
-    {
-        file: 'IEEE_research.pdf',
-        title: 'IEEE Paper',
-        category: 'Engineering Research',
-        description: 'Published research paper exploring advanced engineering concepts.',
-        type: 'pdf'
-    },
-    {
-        file: 'f1_materials.jpg',
-        title: 'Doppler: Manufacturing',
-        category: 'F1 in Schools',
-        description: 'Design and testing phases of the car components.',
-        type: 'image'
-    },
-    {
-        file: 'f1_materials2.jpg',
-        title: 'Doppler: Design',
-        category: 'F1 in Schools',
-        description: 'Detailed view of our manufacturing and iterative design process.',
-        type: 'image'
-    },
-    {
-        file: 'f1_materials3.jpg',
-        title: 'Doppler: Testing',
-        category: 'F1 in Schools',
-        description: 'Commitment to precision and quality through rigorous testing.',
+        category: 'Aerospace',
+        description: 'Recognition for interdisciplinary design excellence, balancing structural integrity with human-centric systems.',
         type: 'image'
     },
     {
         file: 'f1_nationals1.jpg',
-        title: 'Doppler: Nationals',
-        category: 'F1 in Schools',
-        description: 'Secured Best Engineer Award among 120 schools at the National Finals.',
-        type: 'image'
-    },
-    {
-        file: 'f1_nationals2.jpg',
-        title: 'Doppler: Competition',
-        category: 'F1 in Schools',
-        description: 'Presenting our work to industry professionals under pressure.',
+        title: 'Doppler Racing',
+        category: 'Engineering',
+        description: 'National Finals car submission. Won Best Engineer Award. Car achieved 20m in 1.144s.',
         type: 'image'
     },
     {
         file: 'f1_nationals3vid.mp4',
-        title: 'Nationals Car Run',
-        category: 'F1 in Schools',
-        description: 'Our custom car achieving 20m in 1.144s.',
+        title: 'Record Car Run',
+        category: 'Engineering',
+        description: 'Video of the custom-engineered car setting a competition record on the track.',
         type: 'video'
-    },
-    {
-        file: 'f1_nationals4.jpg',
-        title: 'Team Celebration',
-        category: 'F1 in Schools',
-        description: 'Celebrating our hard work and validation at the highest level.',
-        type: 'image'
-    },
-    {
-        file: 'f1_nationals5.jpg',
-        title: 'Best Engineer Award',
-        category: 'F1 in Schools',
-        description: 'Recognition of technical skills, leadership, and innovation.',
-        type: 'image'
-    },
-    {
-        file: 'f1_regionals.jpg',
-        title: 'Regional Qualifiers',
-        category: 'F1 in Schools',
-        description: 'The beginning of our journey at the regional level.',
-        type: 'image'
-    },
-    {
-        file: 'f1_regionals2.jpg',
-        title: 'Regional Race',
-        category: 'F1 in Schools',
-        description: 'Proving ground for our initial engineering concepts.',
-        type: 'image'
-    },
-    {
-        file: 'f1_regionals3.jpg',
-        title: 'Early Development',
-        category: 'F1 in Schools',
-        description: 'Early-stage ideation and team development.',
-        type: 'image'
     },
     {
         file: 'f1_solarcar.jpg',
         title: 'Solar Car Prototype',
-        category: 'Green Energy',
-        description: 'Linking renewable energy systems with racing aerodynamics.',
-        type: 'image'
-    },
-    {
-        file: 'f1_solarcar2.jpg',
-        title: 'Solar Car Dev',
-        category: 'Green Energy',
-        description: 'Exploring clean energy and high-performance engineering.',
-        type: 'image'
-    },
-    {
-        file: 'IISER_visit.jpg',
-        title: 'IISER Collaboration',
-        category: 'Research',
-        description: 'Discussions on CERN research proposal at IISER Pune.',
-        type: 'image'
-    },
-    {
-        file: 'MU20_debate_asias_largest.jpg',
-        title: 'Space UN Debate',
-        category: 'Debate',
-        description: 'Outstanding Performance at Asia\'s largest international UN debate.',
-        type: 'image'
-    },
-    {
-        file: 'spUN_debate.png',
-        title: 'Debate Certificate',
-        category: 'Debate',
-        description: 'Official recognition for Outstanding Performance.',
-        type: 'image'
-    },
-    {
-        file: 'orator.jpg',
-        title: 'Public Speaking',
-        category: 'Debate',
-        description: 'Captivating an audience at the school annual event.',
+        category: 'Engineering',
+        description: 'Experimental design linking renewable energy systems with racing aerodynamics.',
         type: 'image'
     },
     {
         file: 'clash_royale_10k_trophies.jpg',
-        title: 'CR 13K Trophies',
+        title: 'Top 2% Global',
         category: 'Strategy',
-        description: 'Achieved 13,000+ trophies, placing in the top 2% of global players. This milestone reflects dedication to analytical meta-gaming and long-term strategic planning.',
+        description: 'Achieved 13,000+ trophies in Clash Royale. Demonstrates long-term strategic planning and meta-adaptation.',
         type: 'image'
     },
     {
-        file: 'cr_deck.jpg',
-        title: 'Strategy Deck',
-        category: 'Strategy',
-        description: 'Methodical planning and meta-adaptation.',
-        type: 'image'
-    },
-    {
-        file: 'Im_adventurous.jpg',
-        title: 'Adventurous Spirit',
-        category: 'Personal',
-        description: 'Curiosity and openness to new experiences.',
-        type: 'image'
-    },
-    {
-        file: 'im_goofy.jpg',
-        title: 'Authenticity',
-        category: 'Personal',
-        description: 'Approachability and social ease within teams.',
-        type: 'image'
-    },
-    {
-        file: 'im_introspective.jpg',
-        title: 'Introspection',
-        category: 'Personal',
-        description: 'Reflective temperament and thoughtfulness.',
-        type: 'image'
-    },
-    {
-        file: 'me_and_brother.jpg',
-        title: 'Family Bond',
-        category: 'Personal',
-        description: 'Personal grounding and family values.',
-        type: 'image'
-    },
-    {
-        file: 'me_and_frnds.jpg',
-        title: 'Camaraderie',
-        category: 'Personal',
-        description: 'Teamwork and strong interpersonal skills.',
-        type: 'image'
-    },
-    {
-        file: 'me_grinding.jpg',
-        title: 'The Grind',
-        category: 'Personal',
-        description: 'Late-night build session capturing work ethic.',
-        type: 'image'
-    },
-    {
-        file: 'laptop_cooling_proj.jpg',
-        title: 'Laptop Cooling',
-        category: 'Hardware',
-        description: 'Modified internal component layout to improve airflow.',
-        type: 'image'
+        file: 'Citation_Principals_Award_Hemang.pdf',
+        title: 'Student of the Year',
+        category: 'Award',
+        description: 'Principal\'s Citation for excellence in academics, leadership, and community service.',
+        type: 'pdf'
     },
     {
         file: 'Intro_to_gen_AI_course_certificate (1).pdf',
         title: 'Gen AI Cert',
         category: 'Certification',
-        description: 'Google Cloud certification in AI fundamentals.',
+        description: 'Google Cloud certification in Generative AI fundamentals.',
         type: 'pdf'
     },
     {
         file: 'rocketscience101.png',
         title: 'Rocket Science 101',
         category: 'Certification',
-        description: 'Univ. of Michigan aerospace fundamentals (98.2%).',
+        description: 'University of Michigan aerospace fundamentals course (98.2%).',
         type: 'image'
     },
     {
         file: 'soccer1.jpg',
-        title: 'National Football',
+        title: 'National Soccer',
         category: 'Sports',
-        description: 'U17/U19 National tournaments representation.',
-        type: 'image'
-    },
-    {
-        file: 'soccer2.jpg',
-        title: 'Team Sport',
-        category: 'Sports',
-        description: 'Leadership and teamwork on the field.',
+        description: 'Gold medalist at U17/U19 National tournaments.',
         type: 'image'
     },
     {
         file: 'selfdefence_bluebelt.jpg',
         title: 'Martial Arts',
         category: 'Sports',
-        description: 'Blue Belt certification indicating discipline.',
+        description: 'Blue Belt certification in Self Defense.',
         type: 'image'
-    },
-    {
-        file: 'other_certificates.pdf',
-        title: 'Achievements',
-        category: 'Awards',
-        description: 'Consolidated proof of academic and leadership awards.',
-        type: 'pdf'
     }
+    // Add more items here as needed
 ];
 
-// Core Logic
+// Gallery Population Logic
 document.addEventListener('DOMContentLoaded', () => {
+    const galleryContainer = document.querySelector('.gallery-grid');
     const isGalleryPage = window.location.pathname.includes('gallery.html');
-    
-    if (isGalleryPage) {
-        initGallery();
-        setupModal();
+
+    // Only run on gallery page
+    if (isGalleryPage && galleryContainer) {
+        mediaItems.forEach((item, index) => {
+            const el = document.createElement('div');
+            el.className = 'gallery-item';
+            
+            // Staggered animation
+            el.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
+            el.style.opacity = '0';
+
+            let contentHtml = '';
+            
+            if (item.type === 'image' || item.type === 'pdf') {
+                // Use placeholder or actual image
+                let src = item.file;
+                if(item.type === 'pdf') src = item.file.replace('.pdf', '.jpg'); // Simple fallback logic
+                
+                contentHtml = `<img src="${src}" alt="${item.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDRkZGM2IiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0xMyAySDZhMiAyIDAgMCAwLTIgMnYxNmEyIDIgMCAwIDAgMiAyaDEyYTIgMiAwIDAgMCAyLTJWOUwxMyAyeiIvPjwvc3ZnPg=='">`;
+            } else if (item.type === 'video') {
+                contentHtml = `<video src="${item.file}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>`;
+            }
+
+            el.innerHTML = `
+                ${contentHtml}
+                <div class="gallery-overlay">
+                    <h3 style="color:var(--accent-green); font-family:var(--font-main); font-size:1rem; margin-bottom:5px;">${item.title}</h3>
+                    <p style="color:#ccc; font-size:0.85rem; line-height:1.4;">${item.description}</p>
+                </div>
+            `;
+            
+            el.addEventListener('click', () => openModal(item));
+            galleryContainer.appendChild(el);
+        });
     }
 });
 
-function initGallery() {
-    const gallery = document.getElementById('gallery');
-    if (!gallery) return;
-
-    mediaItems.forEach((item, index) => {
-        const galleryItem = document.createElement('div');
-        galleryItem.className = 'gallery-item';
-        
-        // Animation delay
-        galleryItem.style.animation = `fadeInUp 0.6s ease-out backwards ${index * 0.05}s`;
-
-        // Media Content
-        let mediaElement;
-        if (item.type === 'image' || item.type === 'pdf') {
-            mediaElement = document.createElement('img');
-            if (item.type === 'pdf') {
-                mediaElement.src = item.file.replace('.pdf', '.jpg'); 
-                mediaElement.onerror = function() {
-                    // Fallback icon - White for dark mode
-                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0IDJINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMnYtOWwtNS01eiIvPjxwb2x5bGluZSBwb2ludHM9IjE0IDIgMTQgOSAyMCA5Ii8+PC9zdmc+'; 
-                    this.style.padding = '40px';
-                    this.style.objectFit = 'contain';
-                    this.style.background = '#222';
-                };
-            } else {
-                mediaElement.src = item.file;
-            }
-            mediaElement.alt = item.title;
-        } else if (item.type === 'video') {
-            mediaElement = document.createElement('video');
-            mediaElement.src = item.file;
-            mediaElement.muted = true;
-            mediaElement.loop = true;
-            // Play on hover
-            galleryItem.addEventListener('mouseenter', () => mediaElement.play());
-            galleryItem.addEventListener('mouseleave', () => {
-                mediaElement.pause();
-                mediaElement.currentTime = 0;
-            });
-        }
-
-        // Overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'gallery-overlay';
-        overlay.innerHTML = `
-            <h3 style="font-size: 1.2rem; margin-bottom: 5px; font-weight:900; color:white;">${item.title}</h3>
-            <p style="font-size: 0.8rem; text-transform: uppercase; color: #aaa; font-family: 'Space Mono';">${item.category}</p>
-            <p style="font-size: 0.9rem; color: #ddd; margin-top: 10px; line-height: 1.4;">${item.description}</p>
-        `;
-
-        galleryItem.appendChild(mediaElement);
-        galleryItem.appendChild(overlay);
-        galleryItem.addEventListener('click', () => openModal(item));
-        gallery.appendChild(galleryItem);
-    });
-}
-
-function setupModal() {
-    const modal = document.getElementById('modal');
-    const closeBtn = document.getElementById('closeBtn');
-
-    closeBtn.onclick = closeModal;
-    window.onclick = (event) => {
-        if (event.target == modal) closeModal();
-    };
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
-    });
-}
+// Modal Logic
+const modal = document.getElementById('modal');
+const closeBtn = document.getElementById('closeBtn');
 
 function openModal(item) {
-    const modal = document.getElementById('modal');
-    const mediaContainer = document.getElementById('modalMedia');
+    const mediaBox = document.getElementById('modalMedia');
     const title = document.getElementById('modalTitle');
-    const category = document.getElementById('modalCategory');
+    const cat = document.getElementById('modalCategory');
     const desc = document.getElementById('modalDescription');
 
-    mediaContainer.innerHTML = '';
+    mediaBox.innerHTML = '';
     title.textContent = item.title;
-    category.textContent = item.category;
+    cat.textContent = `[ ${item.category.toUpperCase()} ]`;
     desc.textContent = item.description;
 
     if (item.type === 'image') {
-        const img = document.createElement('img');
-        img.src = item.file;
-        mediaContainer.appendChild(img);
+        mediaBox.innerHTML = `<img src="${item.file}" style="width:100%; height:auto; display:block;">`;
     } else if (item.type === 'video') {
-        const video = document.createElement('video');
-        video.src = item.file;
-        video.controls = true;
-        video.autoplay = true;
-        mediaContainer.appendChild(video);
+        mediaBox.innerHTML = `<video src="${item.file}" controls autoplay style="width:100%; height:auto; display:block;"></video>`;
     } else if (item.type === 'pdf') {
-        const embed = document.createElement('embed');
-        embed.src = item.file;
-        embed.type = 'application/pdf';
-        embed.style.width = '100%';
-        embed.style.height = '100%';
-        mediaContainer.appendChild(embed);
+        mediaBox.innerHTML = `<embed src="${item.file}" type="application/pdf" style="width:100%; height:60vh;">`;
     }
 
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
 
-function closeModal() {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-    const mediaContainer = document.getElementById('modalMedia');
-    mediaContainer.innerHTML = ''; // Stop videos
+if (closeBtn) {
+    closeBtn.onclick = () => {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        document.getElementById('modalMedia').innerHTML = '';
+    };
 }
+
+window.onclick = (e) => {
+    if (e.target == modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        document.getElementById('modalMedia').innerHTML = '';
+    }
+};
+
+// Animation Styles via JS injection for simplicity
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+`;
+document.head.appendChild(style);
