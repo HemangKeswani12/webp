@@ -1,12 +1,13 @@
-// -----------------------------------------------------------------------------
-// DYNAMIC CANVAS BACKGROUND (PROMINENT RETRO TECH)
-// -----------------------------------------------------------------------------
-const canvas = document.getElementById('bg-canvas');
+// ============================================================================
+// CIRCUIT BOARD BACKGROUND ANIMATION (Electronics Theme)
+// ============================================================================
+const canvas = document.getElementById('circuit-canvas');
 const ctx = canvas ? canvas.getContext('2d') : null;
 
 let width, height;
-let particles = [];
-const particleCount = 220; // Increased density
+let nodes = [];
+let connections = [];
+const nodeCount = 40;
 let mouse = { x: -1000, y: -1000 };
 
 function initCanvas() {
@@ -15,135 +16,259 @@ function initCanvas() {
     height = canvas.height = window.innerHeight;
 }
 
-class Particle {
-    constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.8;
-        this.vy = (Math.random() - 0.5) * 0.8;
-        this.size = Math.random() * 2.5 + 1.5; // Larger particles
-        this.baseX = this.x;
-        this.baseY = this.y;
-        // Brighter opacity range
-        this.alpha = Math.random() * 0.6 + 0.4;
-        // Color variation (green, amber, cyan)
-        const colorChoice = Math.random();
-        if (colorChoice < 0.33) {
-            this.color = '0, 255, 65'; // Green
-        } else if (colorChoice < 0.66) {
-            this.color = '255, 176, 0'; // Amber
-        } else {
-            this.color = '0, 243, 255'; // Cyan
-        }
+// Node represents circuit board connection points
+class Node {
+    constructor(x, y, type) {
+        this.x = x;
+        this.y = y;
+        this.baseX = x;
+        this.baseY = y;
+        this.type = type || Math.random() > 0.5 ? 'resistor' : 'capacitor';
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.size = 4;
+        this.pulsePhase = Math.random() * Math.PI * 2;
+        this.connected = [];
     }
 
     update() {
+        // Gentle drift
         this.x += this.vx;
         this.y += this.vy;
 
-        // STRONGER Mouse Interaction
+        // Mouse interaction - repel
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 250; // Larger interaction radius
+        const maxDistance = 150;
 
         if (distance < maxDistance) {
-            const forceDirectionX = dx / distance;
-            const forceDirectionY = dy / distance;
             const force = (maxDistance - distance) / maxDistance;
-            // Push away with stronger force
-            this.x -= forceDirectionX * force * 4;
-            this.y -= forceDirectionY * force * 4;
+            this.x -= (dx / distance) * force * 3;
+            this.y -= (dy / distance) * force * 3;
         } else {
-            // Gentle return to flow
-            if (this.x !== this.baseX) {
-                const dx = this.x - this.baseX;
-                this.x -= dx/50;
-            }
-            if (this.y !== this.baseY) {
-                const dy = this.y - this.baseY;
-                this.y -= dy/50;
-            }
+            // Return to base position
+            this.x += (this.baseX - this.x) * 0.02;
+            this.y += (this.baseY - this.y) * 0.02;
         }
 
-        // Screen Wrapping
-        if (this.x > width) this.x = 0;
+        // Boundaries
         if (this.x < 0) this.x = width;
-        if (this.y > height) this.y = 0;
+        if (this.x > width) this.x = 0;
         if (this.y < 0) this.y = height;
+        if (this.y > height) this.y = 0;
+
+        this.pulsePhase += 0.02;
     }
 
     draw() {
-        // Draw with color variation
-        ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+        const pulse = Math.sin(this.pulsePhase) * 0.3 + 0.7;
+        
+        // Draw node as a small circle
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 140, 66, ${pulse * 0.6})`;
         ctx.fill();
         
-        // Add glow effect
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = `rgba(${this.color}, 0.5)`;
-        ctx.fill();
-        ctx.shadowBlur = 0;
+        // Outer glow
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size + 2, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(157, 127, 245, ${pulse * 0.3})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Draw component symbol
+        if (this.type === 'resistor') {
+            this.drawResistor();
+        } else {
+            this.drawCapacitor();
+        }
+    }
+
+    drawResistor() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.strokeStyle = 'rgba(255, 140, 66, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-8, 0);
+        ctx.lineTo(-4, -3);
+        ctx.lineTo(0, 3);
+        ctx.lineTo(4, -3);
+        ctx.lineTo(8, 0);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    drawCapacitor() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.strokeStyle = 'rgba(157, 127, 245, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-2, -6);
+        ctx.lineTo(-2, 6);
+        ctx.moveTo(2, -6);
+        ctx.lineTo(2, 6);
+        ctx.stroke();
+        ctx.restore();
     }
 }
 
-function connect() {
-    for (let a = 0; a < particles.length; a++) {
-        for (let b = a; b < particles.length; b++) {
-            let dx = particles[a].x - particles[b].x;
-            let dy = particles[a].y - particles[b].y;
-            let distance = dx * dx + dy * dy;
+// Connection represents circuit wires
+class Connection {
+    constructor(nodeA, nodeB) {
+        this.nodeA = nodeA;
+        this.nodeB = nodeB;
+        this.signal = 0;
+        this.signalSpeed = 0.05 + Math.random() * 0.05;
+    }
+
+    update() {
+        this.signal += this.signalSpeed;
+        if (this.signal > 1) this.signal = 0;
+    }
+
+    draw() {
+        const dx = this.nodeB.x - this.nodeA.x;
+        const dy = this.nodeB.y - this.nodeA.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > 400) return; // Don't draw very long connections
+
+        // Draw wire as straight line
+        ctx.beginPath();
+        ctx.moveTo(this.nodeA.x, this.nodeA.y);
+        ctx.lineTo(this.nodeB.x, this.nodeB.y);
+        
+        const opacity = 1 - (distance / 400);
+        ctx.strokeStyle = `rgba(120, 100, 140, ${opacity * 0.3})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Draw signal traveling along wire
+        const signalX = this.nodeA.x + dx * this.signal;
+        const signalY = this.nodeA.y + dy * this.signal;
+        
+        ctx.beginPath();
+        ctx.arc(signalX, signalY, 2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 140, 66, ${opacity * 0.8})`;
+        ctx.fill();
+    }
+}
+
+// Initialize nodes in a grid-like pattern
+function initNodes() {
+    nodes = [];
+    connections = [];
+    
+    const cols = Math.ceil(Math.sqrt(nodeCount * (width / height)));
+    const rows = Math.ceil(nodeCount / cols);
+    const spacingX = width / (cols + 1);
+    const spacingY = height / (rows + 1);
+
+    for (let i = 0; i < nodeCount; i++) {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const x = spacingX * (col + 1) + (Math.random() - 0.5) * 50;
+        const y = spacingY * (row + 1) + (Math.random() - 0.5) * 50;
+        nodes.push(new Node(x, y));
+    }
+
+    // Create connections between nearby nodes
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
             
-            // Connect close particles with BRIGHTER lines
-            if (distance < 15000) { // Adjusted threshold
-                let opacityValue = 1 - (distance/15000);
-                // Mix colors for connections
-                ctx.strokeStyle = `rgba(150, 150, 150, ${opacityValue * 0.6})`;
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(particles[a].x, particles[a].y);
-                ctx.lineTo(particles[b].x, particles[b].y);
-                ctx.stroke();
+            if (distance < 200 && Math.random() > 0.7) {
+                connections.push(new Connection(nodes[i], nodes[j]));
             }
         }
     }
 }
 
+// Animation loop
 function animate() {
     if (!ctx) return;
-    ctx.clearRect(0, 0, width, height);
-    for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-    }
-    connect();
+    
+    // Clear with slight trail effect
+    ctx.fillStyle = 'rgba(10, 10, 15, 0.1)';
+    ctx.fillRect(0, 0, width, height);
+
+    // Update and draw connections
+    connections.forEach(conn => {
+        conn.update();
+        conn.draw();
+    });
+
+    // Update and draw nodes
+    nodes.forEach(node => {
+        node.update();
+        node.draw();
+    });
+
     requestAnimationFrame(animate);
 }
 
 // Event Listeners
 window.addEventListener('resize', () => {
     initCanvas();
-    particles = [];
-    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+    initNodes();
 });
 
 window.addEventListener('mousemove', (e) => {
-    mouse.x = e.x;
-    mouse.y = e.y;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
 });
 
-// Start Animation
+// Start circuit animation
 if (canvas) {
     initCanvas();
-    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+    initNodes();
     animate();
 }
 
+// ============================================================================
+// SMOOTH SCROLL FOR NAVIGATION
+// ============================================================================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
 
-// -----------------------------------------------------------------------------
-// GALLERY DATA & LOGIC
-// -----------------------------------------------------------------------------
+// ============================================================================
+// NAVBAR SCROLL EFFECT
+// ============================================================================
+let lastScroll = 0;
+const navbar = document.querySelector('.navbar');
+
+window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > 100) {
+        navbar.style.padding = '15px 60px';
+        navbar.style.background = 'rgba(10, 10, 15, 0.95)';
+    } else {
+        navbar.style.padding = '20px 60px';
+        navbar.style.background = 'rgba(10, 10, 15, 0.9)';
+    }
+    
+    lastScroll = currentScroll;
+});
+
+// ============================================================================
+// GALLERY DATA (for gallery.html)
+// ============================================================================
 const mediaItems = [
     {
         file: 'IEEE_research.pdf',
@@ -420,29 +545,26 @@ const mediaItems = [
     }
 ];
 
-// Gallery Population Logic
+// Gallery population (only runs on gallery.html)
 document.addEventListener('DOMContentLoaded', () => {
     const galleryContainer = document.querySelector('.gallery-grid');
     const isGalleryPage = window.location.pathname.includes('gallery.html');
 
-    // Only run on gallery page
     if (isGalleryPage && galleryContainer) {
         mediaItems.forEach((item, index) => {
             const el = document.createElement('div');
             el.className = 'gallery-item';
             
-            // Staggered animation
-            el.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
+            el.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.05}s`;
             el.style.opacity = '0';
 
             let contentHtml = '';
             
             if (item.type === 'image' || item.type === 'pdf') {
-                // Use placeholder or actual image
                 let src = item.file;
-                if(item.type === 'pdf') src = item.file.replace('.pdf', '.jpg'); // Simple fallback logic
+                if(item.type === 'pdf') src = item.file.replace('.pdf', '.jpg');
                 
-                contentHtml = `<img src="${src}" alt="${item.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDRkZGM2IiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0xMyAySDZhMiAyIDAgMCAwLTIgMnYxNmEyIDIgMCAwIDAgMiAyaDEyYTIgMiAwIDAgMCAyLTJWOUwxMyAyeiIvPjwvc3ZnPg=='">`;
+                contentHtml = `<img src="${src}" alt="${item.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmY4YzQyIiBzdHJva2Utd2lkdGg9IjEiPjxwYXRoIGQ9Ik0xMyAySDZhMiAyIDAgMCAwLTIgMnYxNmEyIDIgMCAwIDAgMiAyaDEyYTIgMiAwIDAgMCAyLTJWOUwxMyAyeiIvPjwvc3ZnPg=='">`;
             } else if (item.type === 'video') {
                 contentHtml = `<video src="${item.file}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>`;
             }
@@ -450,8 +572,8 @@ document.addEventListener('DOMContentLoaded', () => {
             el.innerHTML = `
                 ${contentHtml}
                 <div class="gallery-overlay">
-                    <h3 style="color:var(--accent-green); font-family:var(--font-main); font-size:1rem; margin-bottom:5px;">${item.title}</h3>
-                    <p style="color:#ccc; font-size:0.85rem; line-height:1.4;">${item.description}</p>
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
                 </div>
             `;
             
@@ -466,6 +588,8 @@ const modal = document.getElementById('modal');
 const closeBtn = document.getElementById('closeBtn');
 
 function openModal(item) {
+    if (!modal) return;
+    
     const mediaBox = document.getElementById('modalMedia');
     const title = document.getElementById('modalTitle');
     const cat = document.getElementById('modalCategory');
@@ -503,12 +627,3 @@ window.onclick = (e) => {
         document.getElementById('modalMedia').innerHTML = '';
     }
 };
-
-// Animation Styles via JS injection for simplicity
-const style = document.createElement('style');
-style.innerHTML = `
-@keyframes fadeIn {
-    to { opacity: 1; }
-}
-`;
-document.head.appendChild(style);

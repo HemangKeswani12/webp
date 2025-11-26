@@ -5,29 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive | Hemang Keswani</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Consolas&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gallery-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <canvas id="bg-canvas"></canvas>
+    <canvas id="circuit-canvas"></canvas>
 
-    <nav class="top-bar">
-        <div class="logo-name">HEMANG KESWANI</div>
-        <div class="nav-index">
-            <a href="index.html">/home</a>
-            <a href="gallery.html" class="archive-link">[ARCHIVE]</a>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">HK</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#journey">Journey</a>
+            <a href="index.html#skills">Skills</a>
+            <a href="index.html#contact">Contact</a>
+            <a href="gallery.html" class="archive-btn">Archive</a>
         </div>
     </nav>
 
-    <div class="main-container">
-        <header class="hero" style="min-height: 30vh; margin-bottom: 60px;">
-            <h4 class="highlight-green" style="margin-bottom: 20px;">VISUAL ARCHIVE</h4>
-            <h1>THE<br>ARCHIVE</h1>
-            <p>A visual journey through engineering, research, and life. Each image, video, and document represents a milestone in my path toward building technology that serves humanity.</p>
-        </header>
+    <div class="container">
+        
+        <section class="hero-section" style="min-height: 40vh; margin-bottom: 60px;">
+            <div class="hero-content">
+                <h1 class="hero-title">The <span class="highlight">Archive</span></h1>
+                <p class="hero-subtitle">
+                    A visual journey through engineering, research, and life. Each image, video, and document represents a milestone in my path toward building technology that serves humanity.
+                </p>
+            </div>
+        </section>
 
         <div class="gallery-grid" id="gallery">
             <!-- Grid items will be populated by script.js -->
         </div>
+
     </div>
 
     <!-- Modal -->
@@ -36,12 +47,16 @@
         <div class="modal-content">
             <div class="modal-media" id="modalMedia"></div>
             <div class="modal-info">
-                <h2 id="modalTitle" style="color: var(--accent-green);"></h2>
-                <p id="modalCategory" style="color: var(--accent-amber); margin-bottom: 20px; font-family: var(--font-main); font-size: 0.85rem;"></p>
-                <p id="modalDescription" style="line-height: 1.7; color: #ccc;"></p>
+                <h2 id="modalTitle"></h2>
+                <p id="modalCategory"></p>
+                <p id="modalDescription"></p>
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <p>© 2025 Hemang Keswani. Student, Engineer, Researcher.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
